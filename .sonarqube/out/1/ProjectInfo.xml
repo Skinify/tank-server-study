@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProjectInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sonarsource.com/msbuild/integration/2015/1">
+  <ProjectName>Shared</ProjectName>
+  <ProjectLanguage>C#</ProjectLanguage>
+  <ProjectType>Product</ProjectType>
+  <ProjectGuid>864948a1-2755-49bd-8917-9fccf23046b9</ProjectGuid>
+  <FullPath>O:\Repositorios\TankTankTeste\Shared\Shared.csproj</FullPath>
+  <IsExcluded>false</IsExcluded>
+  <AnalysisResults />
+  <AnalysisSettings>
+    <Property Name="sonar.cs.roslyn.reportFilePaths">O:\Repositorios\TankTankTeste\.sonarqube\out\1\Issues.json</Property>
+    <Property Name="sonar.cs.analyzer.projectOutPaths">O:\Repositorios\TankTankTeste\.sonarqube\out\1</Property>
+  </AnalysisSettings>
+  <Configuration>Debug</Configuration>
+  <Platform>AnyCPU</Platform>
+  <TargetFramework>net7.0</TargetFramework>
+</ProjectInfo>

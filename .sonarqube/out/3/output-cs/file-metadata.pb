@@ -1,0 +1,9 @@
+N
+EO:\Repositorios\TankTankTeste\TankTankTeste.Databases.Game\Context.csutf-8_
+VO:\Repositorios\TankTankTeste\TankTankTeste.Databases.Game\Models\Entities\UserInfo.csutf-8b
+YO:\Repositorios\TankTankTeste\TankTankTeste.Databases.Game\Repositories\UserRepository.csutf-8n
+eO:\Repositorios\TankTankTeste\TankTankTeste.Databases.Game\Repositories\_Interface\IUserRepository.csutf-8p
+gO:\Repositorios\TankTankTeste\TankTankTeste.Databases.Game\Repositories\_Mocked\MockedUserRepository.csutf-8m
+bO:\Repositorios\TankTankTeste\TankTankTeste.Databases.Game\obj\Debug\net7.0\Tank.GlobalUsings.g.csutf-8…
+zO:\Repositorios\TankTankTeste\TankTankTeste.Databases.Game\obj\Debug\net7.0\.NETCoreApp,Version=v7.0.AssemblyAttributes.csutf-8k
+`O:\Repositorios\TankTankTeste\TankTankTeste.Databases.Game\obj\Debug\net7.0\Tank.AssemblyInfo.csutf-8

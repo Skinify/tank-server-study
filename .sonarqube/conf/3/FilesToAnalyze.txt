@@ -1,0 +1,5 @@
+﻿O:\Repositorios\TankTankTeste\TankTankTeste.Databases.Game\Context.cs
+O:\Repositorios\TankTankTeste\TankTankTeste.Databases.Game\Models\Entities\UserInfo.cs
+O:\Repositorios\TankTankTeste\TankTankTeste.Databases.Game\Repositories\UserRepository.cs
+O:\Repositorios\TankTankTeste\TankTankTeste.Databases.Game\Repositories\_Interface\IUserRepository.cs
+O:\Repositorios\TankTankTeste\TankTankTeste.Databases.Game\Repositories\_Mocked\MockedUserRepository.cs

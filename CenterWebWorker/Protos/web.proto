@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option csharp_namespace = "CenterWorker";
+
+package greet;
+
+service CenterEndpoint {
+  rpc AddServer (AddServerRequest) returns (AddServerResponse);
+  rpc ListServers (ListServerRequest) returns (stream ListServerResponse);
+}
+
+message AddServerRequest {
+  string serverIp = 1;
+}
+
+message AddServerResponse {
+  bool registered = 1;
+}
+
+message ListServerRequest {
+ string t = 1;
+}
+
+message ListServerResponse {
+	string serverIp = 1;
+}

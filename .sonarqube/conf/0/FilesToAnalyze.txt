@@ -1,0 +1,3 @@
+﻿O:\Repositorios\TankTankTeste\BaseDatabase\BaseMockedRepository.cs
+O:\Repositorios\TankTankTeste\BaseDatabase\BaseRepository.cs
+O:\Repositorios\TankTankTeste\BaseDatabase\_Interface\IBaseRepository.cs
