@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using static CenterWorker.CenterEndpoint;
+using Extensions;
 
 namespace Shared.DI
 {
@@ -34,10 +35,18 @@ namespace Shared.DI
                 var setMethod = prop.GetSetMethod(false);
                 if (propType.IsClass && propType != typeof(string))
                 {
-                    var __t = Activator.CreateInstance(propType);
-                    configuration.GetSection(prop.Name).Bind(__t);
+                    if (propType.IsArray)
+                    {
+                        var propValue = configuration.GetSection(prop.Name).Get<string[]>();
+                        prop.SetValue(config, propValue);
+                    }
+                    else
+                    {
+                        var __t = Activator.CreateInstance(propType);
+                        configuration.GetSection(prop.Name).Bind(__t);
 
-                    prop.SetValue(config, __t);
+                        prop.SetValue(config, __t);
+                    }
                 }
                 else
                 {

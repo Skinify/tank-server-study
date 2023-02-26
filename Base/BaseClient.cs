@@ -11,16 +11,17 @@ namespace Base
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly SocketState _clientSocketState;
-        private readonly Dictionary<int, Type> _packageHandlers;
+        private readonly Dictionary<int, IHandler<OUT>> _packageHandlers;
         private AsyncCallback? _socketDataReceivedCallback;
 
         public delegate void ClientEventHandle(string clientIp, BaseClient<IN, OUT> C);
         public event ClientEventHandle? Disconnected;
 
-        public BaseClient(IServiceProvider serviceProvider, SocketState socketState) {
+        public BaseClient(IServiceProvider serviceProvider, SocketState socketState)
+        {
             _serviceProvider = serviceProvider;
             _clientSocketState = socketState;
-            _packageHandlers = new Dictionary<int, Type>();
+            _packageHandlers = new Dictionary<int, IHandler<OUT>>();
         }
 
         public void Listen()
@@ -53,7 +54,7 @@ namespace Base
 
                 var byteComming = state.ReadBufferDataAsByteArray();
 
-                var packageIn = default (IN);
+                var packageIn = default(IN);
                 if (packageIn is null)
                     return;
 
@@ -62,31 +63,30 @@ namespace Base
                 //Ler primeiro inteiro que simboliza o tipo do pacote
                 var packageType = packageIn.ReadInt();
 
-                if (_packageHandlers.TryGetValue(packageType, out Type? handler))
+                if (_packageHandlers.TryGetValue(packageType, out IHandler<OUT>? handler))
                 {
-                    IHandler<OUT>? handlerInstance = Activator.CreateInstance(handler, _serviceProvider) as IHandler<OUT>;
-                    if (handlerInstance is not null)
-                        Task.Run(async () =>
+                    Task.Run(async () =>
+                    {
+                        try
                         {
-                            try
-                            {
-                                IPacket? packageOut = await handlerInstance.Handle(packageIn);
-                                if (packageOut is not null)
-                                    SendData(packageOut);
+                            IPacket? packageOut = await handler.Handle(packageIn);
+                            if (packageOut is not null)
+                                SendData(packageOut);
 
-                            }catch(Exception ex)
-                            {
-                                Console.WriteLine(ex.ToString());
-                            }
-                        });
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.ToString());
+                        }
+                    });
                 }
             }
-            catch (Exception){}
+            catch (Exception) { }
 
             WaitForData(async.AsyncState);
         }
 
-        public bool AddHandler(int handleCode, Type handler)
+        public bool AddHandler(int handleCode, IHandler<OUT> handler)
         {
             return _packageHandlers.TryAdd(handleCode, handler);
         }
@@ -109,7 +109,7 @@ namespace Base
             packageOut.Fill(packet.Buffer, packet.Buffer.Length);
 
             var toSend = SocketHelper.FrameMessage(packageOut.Buffer);
-            
+
             this._clientSocketState.Socket?.BeginSend(toSend, 0, toSend.Length, SocketFlags.None, null, _clientSocketState);
         }
     }

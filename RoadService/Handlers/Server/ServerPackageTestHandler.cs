@@ -1,10 +1,13 @@
 ﻿using Base;
 using Base.Interfaces;
+using Base.Notations;
 using Base.Packets.Base;
 using Base.Packets.Server;
+using RoadService.Handlers.Enums;
 
 namespace RoadService.Handlers.Server
 {
+    [PacketHandler((int)EServerHandlers.PING)]
     public class ServerPackageTestHandler : BaseHandler, IHandler<ServerPacketOut>
     {
         public ServerPackageTestHandler(IServiceProvider serviceProvider) : base(serviceProvider) { }

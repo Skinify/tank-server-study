@@ -23,6 +23,10 @@ namespace RoadService.Config
 
         public string CenterWebServerUrl { get; set; } = "http://127.0.0.1:2008/";
 
+        public string ServerName { get; set; } = "Server de teste 1";
+        public int? AllowedLevel { get; set; }
+        public int MaxPlayers { get; set; }
+
         public override void ValidateSettings()
         {
 

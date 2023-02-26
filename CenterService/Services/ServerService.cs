@@ -1,49 +1,42 @@
-﻿using Base.Interfaces;
+﻿using CenterService.WebService.Enums;
+using Microsoft.Extensions.Logging;
 using Shared.DTOs;
-using Tank.Enums;
-using Tank.Repositories._Interface;
 
 namespace CenterService.Services
 {
-    public class ServerService : IManager
+    public class ServerService
     {
-        private readonly IServerRepository _serverRepository;
-        private readonly IDictionary<int, ServerDTO> _servers;
-
-        public ServerService(IServerRepository serverRepository) {
-            _serverRepository = serverRepository;
-            _servers = new Dictionary<int, ServerDTO>();
+        private readonly ILogger<ServerService> _logger;
+        private readonly List<ServerDTO> _servers;
+        public ServerService(ILogger<ServerService> logger)
+        {
+            _logger = logger;
+            _servers = new List<ServerDTO>();
         }
 
-        public Task<int> GetAAS()
+        public bool AddServer(ServerDTO serverDTO)
         {
-            return Task.FromResult(10);
-        }
+            if (_servers.Where(r=>r.Ip == serverDTO.Ip).Any())
+                return false;
 
-        public List<ServerDTO> GetServerList()
-        {
-            return _servers.Values.ToList();
-        }
-
-        public async Task Start()
-        {
-            var servers = await _serverRepository.GetServerList();
-            servers.ToList().ForEach(server =>
+            _servers.Add(new ServerDTO
             {
-                _servers.Add(server.Id, new ServerDTO
-                {
-                    Id= server.Id,
-                    Ip = server.Ip,
-                    AllowedLevel = server.AllowedLevel,
-                    Name = server.Name,
-                    State = (int)EServerState.ONLINE,
-                });
+                Ip = serverDTO.Ip,
+                Name = serverDTO.Name,
+                AllowedLevel = serverDTO.AllowedLevel,
+                Id = Guid.NewGuid().ToString(),
+                Online = 0,
+                Port = serverDTO.Port,
+                State = (int)ServerStateEnum.ONLINE
             });
+
+            _logger.LogInformation("Starting server");
+            return true;
         }
 
-        public Task Stop()
+        public List<ServerDTO> GetServers()
         {
-            throw new NotImplementedException();
+            return _servers;
         }
     }
 }

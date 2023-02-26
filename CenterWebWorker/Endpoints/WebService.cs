@@ -1,14 +1,17 @@
-using CenterWorker.Services;
+using CenterService.Services;
 using Grpc.Core;
+using Shared.DTOs;
+
+#pragma warning disable CS0436 // Conflitos de tipo com o tipo importado no Shared
 
 namespace CenterWorker.Endpoints
 {
     public class WebService : CenterEndpoint.CenterEndpointBase
     {
         private readonly ILogger<WebService> _logger;
-        private readonly TestService _testService;
+        private readonly ServerService _testService;
 
-        public WebService(ILogger<WebService> logger, TestService testService)
+        public WebService(ILogger<WebService> logger, ServerService testService)
         {
             _logger = logger;
             _testService = testService;
@@ -18,17 +21,26 @@ namespace CenterWorker.Endpoints
         {
             return Task.FromResult(new AddServerResponse
             {
-                Registered = _testService.AddServer(request.ServerIp)
+                Registered = _testService.AddServer(new ServerDTO
+                {
+                    Ip = request.ServerIp,
+                    AllowedLevel = request.AllowedLevel,
+                    Name = request.ServerName,
+                })
             });
         }
 
         public override async Task ListServers(ListServerRequest request, IServerStreamWriter<ListServerResponse> responseStream, ServerCallContext context)
         {
-            foreach (string serv in _testService.GetServers())
+            foreach (ServerDTO serv in _testService.GetServers())
             {
                 await responseStream.WriteAsync(new ListServerResponse
                 {
-                    ServerIp = serv
+                    ServerIp = serv.Ip,
+                    ServerId = Guid.NewGuid().ToString(),
+                    PlayersOnline = serv.Online,
+                    AllowedLevel = serv.AllowedLevel,
+                    ServerState = serv.State,
                 });
             }
         }

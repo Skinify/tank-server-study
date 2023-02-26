@@ -43,14 +43,11 @@ namespace RoadService
             await _managersCollection.StartManagers();
 
             //Connecting to fight servers and adding server communication handlers
-            _fightConnector.AddHandler(1, typeof(ServerPackageTestHandler));
+            _fightConnector.AddHandler(typeof(ServerPackageTestHandler));
             await _fightConnector.ConnectTo($"ws://{_roadSettings.FightServerIp}:{_roadSettings.FightServerPort}/");
 
             //Register client handlers
-            RegisterHandlers(new Dictionary<int, Type>()
-            {
-                { 1, typeof(ClientPackageTestHandler) }
-            });
+            RegisterHandlers(typeof(LoginHandler));
 
             //Listening for clients
             ListenOn(_roadSettings.ServerIpAddress, _roadSettings.ServerPort);
@@ -58,7 +55,10 @@ namespace RoadService
 
             var reply = await _centerClient.AddServerAsync(new CenterWorker.AddServerRequest
             {
-                ServerIp = $"{_roadSettings.ServerIpAddress}:{_roadSettings.ServerPort}"
+                ServerIp = $"{_roadSettings.ServerIpAddress}:{_roadSettings.ServerPort}",
+                ServerName = _roadSettings.ServerName,
+                AllowedLevel = _roadSettings.AllowedLevel,
+                MaxPlayers = _roadSettings.MaxPlayers,
             });
 
             if (!reply.Registered)

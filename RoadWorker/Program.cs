@@ -13,6 +13,8 @@ using System.Net.WebSockets;
 using Tank;
 using Tank.DI;
 
+RoadSettings? roadSettings = null;
+
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
@@ -24,7 +26,7 @@ IHost host = Host.CreateDefaultBuilder(args)
             ServiceLifetime.Singleton
         );
 
-        var settings = services.InjectSettings<RoadSettings>(context.Configuration);
+        roadSettings = services.InjectSettings<RoadSettings>(context.Configuration);
 
         services.AddSingleton(opt =>
         {
@@ -32,7 +34,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         });        
 
         services.InjectTankRepositories();
-        services.InjectCenterClient(settings.CenterWebServerUrl);
+        services.InjectCenterClient(roadSettings.CenterWebServerUrl);
         services.AddSingleton<ClientWebSocket>();
         services.AddSingleton<FightConnector>();
         services.AddSingleton<BaseManagerCollection>();
@@ -45,8 +47,10 @@ IHost host = Host.CreateDefaultBuilder(args)
         lc
             .Enrich.WithProperty("Workers", "Road")
             .Enrich.FromLogContext()
-            .WriteTo.Console()
-            .WriteTo.Seq("http://localhost:5341/");
+            .WriteTo.Console();
+
+        if(roadSettings.Seq is not null)
+            lc.WriteTo.Seq(roadSettings.Seq);
 
     })
     .Build();

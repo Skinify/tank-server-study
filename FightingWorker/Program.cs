@@ -3,9 +3,12 @@ using FightingService;
 using FightingService.Config;
 using FightingWorker;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Shared.DI;
 using Tank;
 using Tank.DI;
+
+FightSettings? fightSettings = null;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
@@ -18,10 +21,21 @@ IHost host = Host.CreateDefaultBuilder(args)
             ServiceLifetime.Singleton
         );
 
-        var settings = services.InjectSettings<FightSettings>(context.Configuration);
+        fightSettings = services.InjectSettings<FightSettings>(context.Configuration);
 
         services.InjectTankRepositories();
-        services.InjectCenterClient(settings.CenterWebServerUrl);
+        services.InjectCenterClient(fightSettings.CenterWebServerUrl);
+    })
+    .UseSerilog((ctx, lc) =>
+    {
+        lc
+            .Enrich.WithProperty("Workers", "Road")
+            .Enrich.FromLogContext()
+            .WriteTo.Console();
+
+        if (fightSettings.Seq is not null)
+            lc.WriteTo.Seq(fightSettings.Seq);
+
     })
     .Build();
 

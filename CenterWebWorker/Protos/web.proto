@@ -2,6 +2,8 @@ syntax = "proto3";
 
 option csharp_namespace = "CenterWorker";
 
+import "google/protobuf/wrappers.proto";
+
 package greet;
 
 service CenterEndpoint {
@@ -11,6 +13,9 @@ service CenterEndpoint {
 
 message AddServerRequest {
   string serverIp = 1;
+  string serverName = 2;
+  google.protobuf.Int32Value allowedLevel = 3;
+  int32 maxPlayers = 4;
 }
 
 message AddServerResponse {
@@ -22,5 +27,9 @@ message ListServerRequest {
 }
 
 message ListServerResponse {
-	string serverIp = 1;
+	string serverId = 1;
+	string serverIp = 2;
+	google.protobuf.Int32Value allowedLevel = 4;
+	int32 PlayersOnline = 5;
+	int32 serverState = 3;
 }

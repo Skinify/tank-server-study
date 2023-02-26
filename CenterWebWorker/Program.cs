@@ -1,19 +1,42 @@
+using CenterService.Config;
+using CenterService.Services;
 using CenterWorker.Endpoints;
-using CenterWorker.Services;
+using Serilog;
+using Shared.DI;
 
-var builder = WebApplication.CreateBuilder(args);
+internal class Program
+{
+    private static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddGrpc();
-builder.Services.AddSingleton<TestService>();
-builder.WebHost.
-    UseKestrel()
-    .UseUrls("http://127.0.0.1:2008/");
+        // Add services to the container.
 
-var app = builder.Build();
+        var config = builder.Services.InjectSettings<CenterSettings>(builder.Configuration);
+        config.ValidateSettings();
 
-// Configure the HTTP request pipeline.
-app.MapGrpcService<WebService>();
-app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+        builder.Host.UseSerilog((ctx, lc) =>
+        {
+            lc
+                .Enrich.WithProperty("Workers", "Center")
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .WriteTo.Seq("http://localhost:5341/");
 
-app.Run();
+        });
+
+        builder.Services.AddGrpc();
+        builder.Services.AddSingleton<ServerService>();
+        builder.WebHost.
+            UseKestrel()
+            .UseUrls(config.ListeningUrls);
+
+        var app = builder.Build();
+
+        // Configure the HTTP request pipeline.
+        app.MapGrpcService<WebService>();
+        app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+
+        app.Run();
+    }
+}

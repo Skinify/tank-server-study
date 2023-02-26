@@ -1,8 +1,10 @@
 ﻿using Base.Interfaces;
+using Base.Notations;
 using Base.Packets.Server;
 using Helpers;
 using System.Collections.Concurrent;
 using System.Net.WebSockets;
+using System.Reflection;
 
 namespace Base
 {
@@ -16,7 +18,7 @@ namespace Base
         private readonly BlockingCollection<byte[]> _recvQueue;
         private readonly BlockingCollection<ServerPacketOut> _sendQueue;
 
-        private readonly Dictionary<int, Type> _packageHandlers;
+        private readonly Dictionary<int, IHandler<ServerPacketOut>> _packageHandlers;
 
         public BaseConnector(ClientWebSocket clientWebSocket, IServiceProvider serviceProvider, CancellationTokenSource cancellationToken)
         {
@@ -25,7 +27,7 @@ namespace Base
             _cancellationToken = cancellationToken.Token;
             _recvQueue = new BlockingCollection<byte[]>();
             _sendQueue = new BlockingCollection<ServerPacketOut>();
-            _packageHandlers = new Dictionary<int, Type>();
+            _packageHandlers = new Dictionary<int, IHandler<ServerPacketOut>>();
         }
 
         public async Task ConnectTo(string serverUrl)
@@ -36,7 +38,7 @@ namespace Base
                 var sendTask = Task.Run(() => Send(_clientWebSocket, _cancellationToken));
                 var recvTask = Task.Run(() => Recv(_clientWebSocket, _cancellationToken));
 
-                var hr = new Thread(async () =>
+                new Thread(async () =>
                 {
                     do
                     {
@@ -45,21 +47,15 @@ namespace Base
                         byte[] decodedMessage = SocketHelper.GetDecodedData(recvMsg, recvMsg.Length);
                         package.Fill(decodedMessage, decodedMessage.Length);
                         var packageType = package.ReadInt(true);
-                        if (_packageHandlers.TryGetValue(packageType, out Type? handler))
+                        if (_packageHandlers.TryGetValue(packageType, out IHandler<ServerPacketOut>? handler))
                         {
-                            IHandler<ServerPacketOut>? handlerInstance = Activator.CreateInstance(handler, _serviceProvider) as IHandler<ServerPacketOut>;
-                            if (handlerInstance is null)
-                                continue;
-
-                            ServerPacketOut? packetOut = await handlerInstance.Handle(package);
+                            ServerPacketOut? packetOut = await handler.Handle(package);
                             if (packetOut is not null)
                                 _sendQueue.Add(packetOut);
                         }
 
                     } while (_clientWebSocket.State == WebSocketState.Open);
-                });
-
-                hr.Start();
+                }).Start();
             }
             catch (Exception)
             {
@@ -98,9 +94,24 @@ namespace Base
             Console.WriteLine("Send task exiting...");
         }
 
-        public bool AddHandler(int handleCode, Type handler)
+        public void AddHandler(params Type[] types)
         {
-            return _packageHandlers.TryAdd(handleCode, handler);
+            types.ToList().ForEach((type) =>
+            {
+                IHandler<ServerPacketOut>? handlerInstance = Activator.CreateInstance(type, _serviceProvider) as IHandler<ServerPacketOut>;
+                if (handlerInstance is null)
+                    return;
+
+                PacketHandler? handlerAnotation = handlerInstance.GetType().GetCustomAttribute(typeof(PacketHandler), true) as PacketHandler;
+                if (handlerAnotation is null)
+                    throw new Exception($"Handler {type.Name} is not associated with any package type");
+
+                if (!typeof(IHandler<ServerPacketOut>).IsAssignableFrom(type))
+                    throw new Exception($"Handler {type.Name} - {handlerAnotation.HandlerCode}, does not implement IHandler");
+
+                if (!_packageHandlers.TryAdd(handlerAnotation.HandlerCode, handlerInstance))
+                    throw new Exception($"Handler of code {handlerAnotation.HandlerCode} has already been added");
+            });
         }
     }
 }

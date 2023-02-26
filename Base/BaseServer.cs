@@ -9,6 +9,8 @@ using Extensions;
 using Helpers;
 using Base.Interfaces;
 using Base.Packets.Base;
+using Base.Notations;
+using System.Reflection;
 
 namespace Base
 {
@@ -24,7 +26,7 @@ namespace Base
 
         private AsyncCallback? _socketDataReceivedCallback;
 
-        private readonly IDictionary<int, Type> _handlers;
+        private readonly IDictionary<int, IHandler<OUT>> _handlers;
 
         private readonly Timer _pingTimer;
 
@@ -34,7 +36,7 @@ namespace Base
             _logger = logger;
             _clients = new HybridDictionary();
             _socketDataReceivedCallback = OnDataReceived;
-            _handlers = new Dictionary<int, Type>();
+            _handlers = new Dictionary<int, IHandler<OUT>>();
             _pingTimer = new Timer(new TimerCallback(PingClients), null, 1, 10000);
         }
 
@@ -158,15 +160,23 @@ namespace Base
             return c;
         }
 
-        public void RegisterHandlers(IDictionary<int, Type> handlers)
+        public void RegisterHandlers(params Type[] types)
         {
-            handlers.ToList().ForEach((handler) =>
+            types.ToList().ForEach((type) =>
             {
-                 if(!typeof(IHandler<OUT>).IsAssignableFrom(handler.Value))
-                    throw new Exception($"Handler {handler.Key}-{handler.Value.Name}, does not implement IHandler");
+                IHandler<OUT>? handlerInstance = Activator.CreateInstance(type, _serviceProvider) as IHandler<OUT>;
+                if (handlerInstance is null)
+                    return;
 
-                 if(!_handlers.TryAdd(handler.Key, handler.Value))
-                    throw new Exception($"Handler of code {handler.Key} has already been added");
+                PacketHandler? handlerAnotation = handlerInstance.GetType().GetCustomAttribute(typeof(PacketHandler), true) as PacketHandler;
+                if (handlerAnotation is null)
+                    throw new Exception($"Handler {type.Name} is not associated with any package type");
+
+                if (!typeof(IHandler<OUT>).IsAssignableFrom(type))
+                    throw new Exception($"Handler {type.Name} - {handlerAnotation.HandlerCode}, does not implement IHandler");
+
+                if (!_handlers.TryAdd(handlerAnotation.HandlerCode, handlerInstance))
+                    throw new Exception($"Handler of code {handlerAnotation.HandlerCode} has already been added");
             });
         }
 

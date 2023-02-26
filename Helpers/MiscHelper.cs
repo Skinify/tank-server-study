@@ -1,4 +1,7 @@
-﻿namespace Helpers
+﻿using System.Reflection;
+using System;
+
+namespace Helpers
 {
     public static class MiscHelper
     {
