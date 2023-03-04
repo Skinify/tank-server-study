@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Tank.Enums;
 using Tank.Models.Entities.Server;
 
 namespace Tank.Seed
@@ -15,6 +16,11 @@ namespace Tank.Seed
 
         public static void SeedServers(this ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ServerStates>().HasData(
+              new ServerStates { Id = (int)EServerState.OFFLINE, Description = "Server offline" },
+              new ServerStates { Id = (int)EServerState.ONLINE, Description = "Server online" }
+          );
+
             modelBuilder.Entity<Servers>().HasData(
                 new Servers { Id = 0, Ip = "127.0.0.1", Port = 9202, Name = "Test server" }
             );

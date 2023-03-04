@@ -29,7 +29,7 @@ namespace Tank.Repositories
 
         public async Task<IList<Servers>> GetServerList()
         {
-            return await _tankContext.Servers.ToListAsync();
+            return new List<Servers>();
         }
     }
 }

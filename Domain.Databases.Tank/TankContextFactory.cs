@@ -9,6 +9,7 @@ namespace Tank
         {
             var optionsBuilder = new DbContextOptionsBuilder<TankContext>();
             optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Database=Tank;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            optionsBuilder.EnableSensitiveDataLogging(true);
 
             return new TankContext(optionsBuilder.Options);
         }

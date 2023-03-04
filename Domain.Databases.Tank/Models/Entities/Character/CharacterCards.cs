@@ -10,9 +10,14 @@ namespace Tank.Models.Entities.Character
     {
         [ForeignKey(nameof(Characters))]
         public int CharacterId { get; set; }
+        public virtual Characters Character { get; set; } = null!;
+
 
         [ForeignKey(nameof(Cards))]
         public int CardId { get; set; }
+        public virtual Cards Card { get; set; } = null!;
+
+
         public int Place { get; set; }
         public int Level { get; set; }
     }

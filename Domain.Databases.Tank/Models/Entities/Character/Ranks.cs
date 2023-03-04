@@ -8,7 +8,7 @@ namespace Tank.Models.Entities.Character
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
-        public string? Name { get; set; }
+        public string Name { get; set; } = null!;
         public int Attack { get; set; }
         public int Defense { get; set; }
         public int Agility { get; set; }

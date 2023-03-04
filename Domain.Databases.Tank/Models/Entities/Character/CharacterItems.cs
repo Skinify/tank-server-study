@@ -16,9 +16,11 @@ namespace Tank.Models.Entities.Character
 
         [ForeignKey(nameof(Characters))]
         public int CharacterId { get; set; }
+        public virtual Characters Character { get; set; } = null!;
 
         [ForeignKey(nameof(Items))]
         public int ItemId { get; set; }
+        public virtual Items Item { get; set; } = null!;
 
         [Description("Quantity of that item")]
         public int Count { get; set; }

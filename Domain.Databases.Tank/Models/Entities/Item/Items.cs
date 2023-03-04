@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Tank.Models.Entities.Character;
 
 namespace Tank.Models.Entities.Item
 {
@@ -20,6 +21,8 @@ namespace Tank.Models.Entities.Item
 
         [ForeignKey(nameof(ItemsCategories))]
         public int ItemsCategoryId { get; set; }
+        public virtual ItemsCategories ItemsCategory { get; set; } = null!;
+
 
         [Required]
         public string Icon { get; set; } = null!;
@@ -43,24 +46,38 @@ namespace Tank.Models.Entities.Item
         public bool IsUsable { get; set; }
 
         [ForeignKey(nameof(ItemBindTypes))]
-        public int? ItemBindTypeId { get; set; }
+        public int ItemBindTypeId { get; set; }
+        public virtual ItemBindTypes ItemBindType { get; set; } = null!;
+
 
         [ForeignKey(nameof(ItemHoleTypes))]
         public int? Hole1Id { get; set; }
+        public virtual ItemHoleTypes? Hole1 { get; set; }
+
 
         [ForeignKey(nameof(ItemHoleTypes))]
         public int? Hole2Id { get; set; }
+        public virtual ItemHoleTypes? Hole2 { get; set; }
+
 
         [ForeignKey(nameof(ItemHoleTypes))]
         public int? Hole3Id { get; set; }
+        public virtual ItemHoleTypes? Hole3 { get; set; }
+
+
 
         [ForeignKey(nameof(ItemHoleTypes))]
         public int? Hole4Id { get; set; }
+        public virtual ItemHoleTypes? Hole4 { get; set; }
+
 
         [ForeignKey(nameof(ItemHoleTypes))]
         public int? Hole5Id { get; set; }
+        public virtual ItemHoleTypes? Hole5 { get; set; }
+
 
         [ForeignKey(nameof(ItemHoleTypes))]
         public int? Hole6Id { get; set; }
+        public virtual ItemHoleTypes? Hole6 { get; set; }
     }
 }

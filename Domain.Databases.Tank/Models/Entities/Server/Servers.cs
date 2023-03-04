@@ -14,6 +14,7 @@ namespace Tank.Models.Entities.Server
 
         [ForeignKey(nameof(ServerStates))]
         public int ServerStateId { get; set; }
+        public virtual ServerStates ServerState { get; set; } = null!;
 
         public int TotalCharacters { get; set; }
         public int TotalRooms { get; set; }

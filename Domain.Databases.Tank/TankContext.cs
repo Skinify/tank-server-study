@@ -21,11 +21,15 @@ namespace Tank
         public DbSet<Levels> Levels { get; set; }
         public DbSet<CharactersFriends> CharactersFriends { get; set; }
         public DbSet<Ranks> Ranks { get; set; }
+        public DbSet<CharacterMarriages> CharacterMarriages { get; set; }
+        public DbSet<CharactersCustomizedItems> CharactersCustomizedItems { get; set; }
+        public DbSet<MarriageProposals> MarriageProposals { get; set; }
+        public DbSet<CharacterTeachers> CharacterTeachers { get; set; }
         #endregion
 
         #region Server
         public DbSet<ServerConfigs> ServerConfig { get; set; }
-        public DbSet<Servers> Servers { get; set; }
+        //public DbSet<Servers> Servers { get; set; }
         public DbSet<ServerStates> ServerStates { get; set; }
         #endregion
 
@@ -43,6 +47,8 @@ namespace Tank
             modelBuilder.SeedItemsBindTypes();
             modelBuilder.SeedItemsCategory();
             modelBuilder.SeedItemsHoleTypes();
+            modelBuilder.SeedLevels();
+            modelBuilder.SeedRanks();
         }
     }
 }
