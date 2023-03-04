@@ -24,6 +24,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         fightSettings = services.InjectSettings<FightSettings>(context.Configuration);
 
         services.InjectTankRepositories();
+        services.InjectSharedDTOMapping();
         services.InjectCenterClient(fightSettings.CenterWebServerUrl);
     })
     .UseSerilog((ctx, lc) =>

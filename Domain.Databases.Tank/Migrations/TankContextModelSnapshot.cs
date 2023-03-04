@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Tank;
 
 #nullable disable
 
@@ -72,6 +73,9 @@ namespace Tank.Migrations
                     b.HasIndex("CharacterId")
                         .IsUnique();
 
+                    b.HasIndex("RankId")
+                        .IsUnique();
+
                     b.ToTable("CharacterRanks", "Character");
                 });
 
@@ -87,6 +91,42 @@ namespace Tank.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Characters", "Character");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Character.CharactersFriends", b =>
+                {
+                    b.Property<DateTime>("AddDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CharacterId1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CharacterId2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasIndex("CharacterId1");
+
+                    b.HasIndex("CharacterId2");
+
+                    b.ToTable("CharactersFriends", "Character");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Character.Levels", b =>
+                {
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Blood")
+                        .HasColumnType("int");
+
+                    b.Property<long>("Xp")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Level");
+
+                    b.ToTable("Levels", "Character");
                 });
 
             modelBuilder.Entity("Tank.Models.Entities.Character.Ranks", b =>
@@ -157,6 +197,43 @@ namespace Tank.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Tank.Models.Entities.Item.ItemHoleTypes", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OpenCost")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ItemHoleTypes", "Item");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 0,
+                            Description = "Hole for attacking purpose",
+                            OpenCost = 0
+                        },
+                        new
+                        {
+                            Id = 1,
+                            Description = "Hole for defending purpose",
+                            OpenCost = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Hole for increase attributes purpose",
+                            OpenCost = 0
+                        });
+                });
+
             modelBuilder.Entity("Tank.Models.Entities.Item.Items", b =>
                 {
                     b.Property<int>("Id")
@@ -184,8 +261,30 @@ namespace Tank.Migrations
                     b.Property<int>("Guard")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Hole1Id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Hole2Id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Hole3Id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Hole4Id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Hole5Id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Hole6Id")
+                        .HasColumnType("int");
+
                     b.Property<int>("Hp")
                         .HasColumnType("int");
+
+                    b.Property<string>("Icon")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsComposable")
                         .HasColumnType("bit");
@@ -202,7 +301,7 @@ namespace Tank.Migrations
                     b.Property<bool>("IsUsable")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ItemBindTypeId")
+                    b.Property<int?>("ItemBindTypeId")
                         .HasColumnType("int");
 
                     b.Property<int>("ItemsCategoryId")

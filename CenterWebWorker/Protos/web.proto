@@ -23,13 +23,15 @@ message AddServerResponse {
 }
 
 message ListServerRequest {
- string t = 1;
+
 }
 
 message ListServerResponse {
 	string serverId = 1;
 	string serverIp = 2;
-	google.protobuf.Int32Value allowedLevel = 4;
-	int32 PlayersOnline = 5;
 	int32 serverState = 3;
+	google.protobuf.Int32Value allowedLevel = 4;
+	int32 playersOnline = 5;
+	int32 maxPlayers = 6;
+	string serverName = 7;
 }

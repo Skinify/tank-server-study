@@ -1,7 +1,8 @@
 using API.DTOs.Response;
-using Grpc.Core;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using static CenterWorker.CenterEndpoint;
+using Shared.DTOs.Internal;
+using Shared.ServerClients;
 
 namespace API.Controllers
 {
@@ -10,32 +11,29 @@ namespace API.Controllers
     public class PlayController : ControllerBase
     {
         private readonly ILogger<PlayController> _logger;
-        private readonly CenterEndpointClient _centerClient;
+        private readonly CenterClient _centerClient;
+        private readonly IMapper _mapper;
 
-        public PlayController(ILogger<PlayController> logger, CenterEndpointClient centerClient)
+        public PlayController(ILogger<PlayController> logger, CenterClient centerClient, IMapper mapper)
         {
             _logger = logger;
             _centerClient = centerClient;
+            _mapper = mapper;
         }
 
-        [HttpPost(Name = "Play")]
+        [Route("Play")]
+        [HttpPost]
         public async Task<ActionResult<LoginResponseDTO>> Play()
         {
             return Ok();
         }
 
-        [HttpGet(Name = "ListServers")]
+        [Route("ListServers")]
+        [HttpGet]
         public async Task<ActionResult<IList<ListServersResponseDTO>>> ListServers()
         {
-            var serverList = new List<string>();
-            using(var call = _centerClient.ListServers(new CenterWorker.ListServerRequest()))
-            {
-                while(await call.ResponseStream.MoveNext())
-                {
-                    serverList.Add(call.ResponseStream.Current.ServerIp);
-                }
-            }
-            return Ok(serverList);
+            var serverList = await _centerClient.ListServers();
+            return Ok(_mapper.Map<IList<ServerDTO>, IList<ListServersResponseDTO>>(serverList));
         }
     }
 }

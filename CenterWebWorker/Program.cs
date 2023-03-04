@@ -10,8 +10,6 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-
         var config = builder.Services.InjectSettings<CenterSettings>(builder.Configuration);
         config.ValidateSettings();
 
@@ -21,9 +19,11 @@ internal class Program
                 .Enrich.WithProperty("Workers", "Center")
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                .WriteTo.Seq("http://localhost:5341/");
+                .WriteTo.Seq(config.Seq);
 
         });
+
+        builder.Services.InjectSharedDTOMapping();
 
         builder.Services.AddGrpc();
         builder.Services.AddSingleton<ServerService>();
@@ -33,7 +33,6 @@ internal class Program
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
         app.MapGrpcService<WebService>();
         app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 

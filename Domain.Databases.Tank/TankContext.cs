@@ -18,6 +18,8 @@ namespace Tank
         public DbSet<Characters> Characters { get; set; }
         public DbSet<CharacterCards> CharacterCards { get; set; }
         public DbSet<CharacterRanks> CharacterRanks { get; set; }
+        public DbSet<Levels> Levels { get; set; }
+        public DbSet<CharactersFriends> CharactersFriends { get; set; }
         public DbSet<Ranks> Ranks { get; set; }
         #endregion
 
@@ -31,6 +33,7 @@ namespace Tank
         public DbSet<ItemBindTypes> ItemBindTypes { get; set; }
         public DbSet<Items> Items { get; set; }
         public DbSet<ItemsCategories> ItemsCategory { get; set; }
+        public DbSet<ItemHoleTypes> ItemHoleTypes { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -39,6 +42,7 @@ namespace Tank
             modelBuilder.SeedServers();
             modelBuilder.SeedItemsBindTypes();
             modelBuilder.SeedItemsCategory();
+            modelBuilder.SeedItemsHoleTypes();
         }
     }
 }

@@ -1,8 +1,9 @@
-﻿using Grpc.Net.Client;
+﻿using API.DTOs.Mapping;
+using Grpc.Net.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.ServerClients;
 using static CenterWorker.CenterEndpoint;
-using Extensions;
 
 namespace Shared.DI
 {
@@ -11,6 +12,12 @@ namespace Shared.DI
         public static void InjectCenterClient(this IServiceCollection serviceDescriptors, string centerEndpoint)
         {
             serviceDescriptors.AddSingleton(option => new CenterEndpointClient(GrpcChannel.ForAddress(centerEndpoint)));
+            serviceDescriptors.AddSingleton<CenterClient>();
+        }
+
+        public static void InjectSharedDTOMapping(this IServiceCollection serviceDescriptors)
+        {
+            serviceDescriptors.AddAutoMapper(typeof(SharedDTOMapping));
         }
 
         public static T InjectSettings<T>(this IServiceCollection serviceDescriptors, IConfiguration configuration)

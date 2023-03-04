@@ -15,6 +15,15 @@ namespace Tank.Seed
             );
         }
 
+        public static void SeedItemsHoleTypes(this ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ItemHoleTypes>().HasData(
+                new ItemHoleTypes { Id = (int)EItemHoleType.ATTACK, Description = "Hole for attacking purpose" },
+                new ItemHoleTypes { Id = (int)EItemHoleType.DEFENSE, Description = "Hole for defending purpose" },
+                new ItemHoleTypes { Id = (int)EItemHoleType.ATTRIBUTE, Description = "Hole for increase attributes purpose" }
+            );
+        }
+
         public static void SeedItemsCategory(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ItemsCategories>().HasData(

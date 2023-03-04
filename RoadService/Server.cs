@@ -6,6 +6,7 @@ using RoadService.Config;
 using RoadService.Connectors;
 using RoadService.Handlers.Client;
 using RoadService.Handlers.Server;
+using Shared.ServerClients;
 using static CenterWorker.CenterEndpoint;
 
 namespace RoadService
@@ -14,7 +15,7 @@ namespace RoadService
     {
         private readonly ILogger<Server> _logger;
         private readonly RoadSettings _roadSettings;
-        private readonly CenterEndpointClient _centerClient;
+        private readonly CenterClient _centerClient;
         private readonly FightConnector _fightConnector;
         private readonly BaseManagerCollection _managersCollection;
 
@@ -22,7 +23,7 @@ namespace RoadService
             ILogger<Server> logger, 
             RoadSettings roadSettings, 
             IServiceProvider serviceProvider,
-            CenterEndpointClient centerClient,
+            CenterClient centerClient,
             FightConnector fightConnector,
             BaseManagerCollection baseManagerCollection
             ) : base(serviceProvider, logger)
@@ -52,11 +53,11 @@ namespace RoadService
             //Listening for clients
             ListenOn(_roadSettings.ServerIpAddress, _roadSettings.ServerPort);
 
-
-            var reply = await _centerClient.AddServerAsync(new CenterWorker.AddServerRequest
+            var reply = await _centerClient.AddServer(new Shared.DTOs.Internal.ServerDTO
             {
-                ServerIp = $"{_roadSettings.ServerIpAddress}:{_roadSettings.ServerPort}",
-                ServerName = _roadSettings.ServerName,
+                Ip = _roadSettings.ServerIp,
+                Port = _roadSettings.ServerPort,
+                Name = _roadSettings.ServerName,
                 AllowedLevel = _roadSettings.AllowedLevel,
                 MaxPlayers = _roadSettings.MaxPlayers,
             });

@@ -34,6 +34,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         });        
 
         services.InjectTankRepositories();
+        services.InjectSharedDTOMapping();
         services.InjectCenterClient(roadSettings.CenterWebServerUrl);
         services.AddSingleton<ClientWebSocket>();
         services.AddSingleton<FightConnector>();

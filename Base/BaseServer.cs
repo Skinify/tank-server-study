@@ -53,8 +53,6 @@ namespace Base
                 var t = MiscHelper.CreateInstance<OUT>()();
                 t.WriteInt(1);
                 t.WriteInt(999);
-                t.WriteInt(666);
-                t.WriteString("testando");
                 client.SendData(t);
             });
         }

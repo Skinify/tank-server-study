@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Tank.Models.Entities.Character
 {
     [Index(nameof(CharacterId), IsUnique = true)]
+    [Index(nameof(RankId), IsUnique = true)]
     [Table(nameof(CharacterRanks), Schema = "Character")]
     [Keyless]
     public class CharacterRanks

@@ -1,6 +1,6 @@
 ﻿using CenterService.WebService.Enums;
 using Microsoft.Extensions.Logging;
-using Shared.DTOs;
+using Shared.DTOs.Internal;
 
 namespace CenterService.Services
 {

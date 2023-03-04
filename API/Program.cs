@@ -4,6 +4,7 @@ using Tank.DI;
 using Tank;
 using Shared.DI;
 using API.Config;
+using API.DTOs.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,8 @@ var settings = builder.Services.InjectSettings<ApiSettings>(builder.Configuratio
 
 builder.Services.InjectTankRepositories();
 builder.Services.InjectCenterClient(settings.CenterWebServerUrl);
+builder.Services.InjectSharedDTOMapping();
+builder.Services.AddAutoMapper(typeof(DTOMapping));
 
 var app = builder.Build();
 

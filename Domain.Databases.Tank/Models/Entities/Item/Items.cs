@@ -21,6 +21,9 @@ namespace Tank.Models.Entities.Item
         [ForeignKey(nameof(ItemsCategories))]
         public int ItemsCategoryId { get; set; }
 
+        [Required]
+        public string Icon { get; set; } = null!;
+
         public int Attack { get; set; }
         public int Defense { get; set; }
         public int Agility { get; set; }
@@ -40,7 +43,24 @@ namespace Tank.Models.Entities.Item
         public bool IsUsable { get; set; }
 
         [ForeignKey(nameof(ItemBindTypes))]
-        public int ItemBindTypeId { get; set; }
+        public int? ItemBindTypeId { get; set; }
 
+        [ForeignKey(nameof(ItemHoleTypes))]
+        public int? Hole1Id { get; set; }
+
+        [ForeignKey(nameof(ItemHoleTypes))]
+        public int? Hole2Id { get; set; }
+
+        [ForeignKey(nameof(ItemHoleTypes))]
+        public int? Hole3Id { get; set; }
+
+        [ForeignKey(nameof(ItemHoleTypes))]
+        public int? Hole4Id { get; set; }
+
+        [ForeignKey(nameof(ItemHoleTypes))]
+        public int? Hole5Id { get; set; }
+
+        [ForeignKey(nameof(ItemHoleTypes))]
+        public int? Hole6Id { get; set; }
     }
 }
