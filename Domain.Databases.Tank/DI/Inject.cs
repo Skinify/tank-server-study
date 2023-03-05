@@ -9,7 +9,7 @@ namespace Tank.DI
     {
         public static void InjectTankRepositories(this IServiceCollection serviceDescriptors)
         {
-            serviceDescriptors.AddSingleton<IServerRepository, ServerRepository>();
+            serviceDescriptors.AddSingleton<IConfigurationRepository, ConfigurationRepository>();
             serviceDescriptors.AddSingleton<ICharacterRepository, CharacterRepository>();
 
             serviceDescriptors.AddSingleton<TankUnityOfWork>();

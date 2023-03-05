@@ -23,13 +23,9 @@ namespace Tank.Models.Entities.Character
         public int Medals { get; set;}
         public int Coupons { get; set; }
 
-        [ForeignKey(nameof(Characters))]
-        public int? TeacherId { get; set; }
-        public virtual Characters? Teacher { get; set; }
-
-        public ICollection<CharacterMarriages> Marriages { get; set; } = null!;
-        public ICollection<CharactersFriends> Friends { get; set; } = null!;
-        //public ICollection<Disciples> Disciples { get; set; } = null!;
+        public ICollection<Marriages> Marriages { get; set; } = null!;
+        public ICollection<Friends> Friends { get; set; } = null!;
+        public ICollection<Disciples> Disciples { get; set; } = null!;
 
         public DateTime CreationDate { get; set; }
 

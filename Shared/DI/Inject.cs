@@ -2,6 +2,7 @@
 using Grpc.Net.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Config;
 using Shared.ServerClients;
 using static CenterWorker.CenterEndpoint;
 
@@ -20,7 +21,7 @@ namespace Shared.DI
             serviceDescriptors.AddAutoMapper(typeof(SharedDTOMapping));
         }
 
-        public static T InjectSettings<T>(this IServiceCollection serviceDescriptors, IConfiguration configuration)
+        public static T InjectSettings<T>(this IServiceCollection serviceDescriptors, IConfiguration configuration) where T : DefaultSettings
         {
             Type tType = typeof(T);
 
@@ -64,6 +65,8 @@ namespace Shared.DI
                     prop.SetValue(config, Convert.ChangeType(propValue, propType));
                 }
             });
+
+            config.ValidateSettings();
 
             serviceDescriptors.AddSingleton(tType, config);
             return config;

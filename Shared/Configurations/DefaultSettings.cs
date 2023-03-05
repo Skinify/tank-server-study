@@ -1,4 +1,4 @@
-﻿namespace Base.Config
+﻿namespace Shared.Config
 {
     public class DefaultSettings
     {

@@ -1,4 +1,6 @@
-﻿using Org.BouncyCastle.Crypto;
+﻿using API.Config;
+using API.Services._Interface;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Security;
@@ -7,60 +9,51 @@ using System.Security.Cryptography;
 
 namespace API.Services
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
-        public static string? RSAPublicKey = "-----BEGIN PUBLIC KEY-----\r\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAL1ezivGNWo8deIaiWOtukZ5hsczjqza\r\nuNeF0ieYdWN8fE6/YZpB4ZOyZiGhp8EfRlFpUjzPtw1i5CcA7K+SWHUCAwEAAQ==\r\n-----END PUBLIC KEY-----";
-        public static string? RSAPrivateKey = "-----BEGIN RSA PRIVATE KEY-----\r\nMIIBOgIBAAJBAL1ezivGNWo8deIaiWOtukZ5hsczjqzauNeF0ieYdWN8fE6/YZpB\r\n4ZOyZiGhp8EfRlFpUjzPtw1i5CcA7K+SWHUCAwEAAQJAMLJxiDY3RDN6CQPT8ssZ\r\nDMhxjUZH2VGBmQKzsTT2cvd94bH7V4ETGv011Tv5d31eeMudGLkiwUMIQUVBq/ba\r\nPQIhAOLCUPZxw4v/e3GnRi8Zm31wymdGk40AFuPApAGNFbDnAiEA1co6HkX4psjf\r\ny+XzxcSPlojhiyb98CQV2x5akJz1FEMCIQCLQHVjwl0pvgzasLSi/ADGudsyLN8z\r\nuZhU6NpOsYtehQIgMFrAEG7VEawnai/FljqiG3M0SEv2baVLyDayVzkY+Y8CIBji\r\ngNSm2/bwJM4fYfSsHD2BXOTneOWWP9ZtM6i30gWC\r\n-----END RSA PRIVATE KEY-----";
+        private static RSACryptoServiceProvider _privateRSAProvider = null!;
+        private static RSACryptoServiceProvider _publicRSAProvider = null!;
 
-        public string CreateToken(List<Claim> claims)
-        {
-            if (RSAPrivateKey is null || RSAPublicKey is null)
-                throw new Exception("Chaves não configuradas");
+        public AuthService(ApiSettings apiSettings) {
+            if (_privateRSAProvider is not null && _publicRSAProvider is not null)
+                return;
 
-            RSAParameters rsaParams;
-            using (var tr = new StringReader(RSAPrivateKey))
+            RSAParameters _rsaKeyParams;
+            using (var tr = new StringReader(apiSettings.RSA.PrivateKey))
             {
                 var pemReader = new PemReader(tr);
-                var keyPair = pemReader.ReadObject() as AsymmetricCipherKeyPair;
+                AsymmetricCipherKeyPair? keyPair = pemReader.ReadObject() as AsymmetricCipherKeyPair;
                 if (keyPair == null)
-                {
                     throw new Exception("Could not read RSA private key");
-                }
-                var privateRsaParams = keyPair.Private as RsaPrivateCrtKeyParameters;
-                rsaParams = DotNetUtilities.ToRSAParameters(privateRsaParams);
+
+                _rsaKeyParams = DotNetUtilities.ToRSAParameters(keyPair.Private as RsaPrivateCrtKeyParameters);
+            }
+            _privateRSAProvider = new RSACryptoServiceProvider();
+            _privateRSAProvider.ImportParameters(_rsaKeyParams);
+
+            using (var tr = new StringReader(apiSettings.RSA.PublicKey))
+            {
+                var pemReader = new PemReader(tr);
+                RsaKeyParameters? publicKeyParams = pemReader.ReadObject() as RsaKeyParameters;
+                if (publicKeyParams == null)
+                    throw new Exception("Could not read RSA public key");
+
+                _rsaKeyParams = DotNetUtilities.ToRSAParameters(publicKeyParams);
             }
 
-            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
-            {
-                rsa.ImportParameters(rsaParams);
-                Dictionary<string, object> payload = claims.ToDictionary(k => k.Type, v => (object)v.Value);
-                return Jose.JWT.Encode(payload, rsa, Jose.JwsAlgorithm.RS256);
-            }
+            _publicRSAProvider = new RSACryptoServiceProvider();
+            _publicRSAProvider.ImportParameters(_rsaKeyParams);
+        }
+
+        public string CreateToken(IList<Claim> claims)
+        {
+            Dictionary<string, object> payload = claims.ToDictionary(k => k.Type, v => (object)v.Value);
+            return Jose.JWT.Encode(payload, _privateRSAProvider, Jose.JwsAlgorithm.RS256);
         }
 
         public string DecodeToken(string token)
         {
-            if (RSAPrivateKey is null || RSAPublicKey is null)
-                throw new Exception("Chaves não configuradas");
-
-            RSAParameters rsaParams;
-
-            using (var tr = new StringReader(RSAPublicKey))
-            {
-                var pemReader = new PemReader(tr);
-                var publicKeyParams = pemReader.ReadObject() as RsaKeyParameters;
-                if (publicKeyParams == null)
-                {
-                    throw new Exception("Could not read RSA public key");
-                }
-                rsaParams = DotNetUtilities.ToRSAParameters(publicKeyParams);
-            }
-            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
-            {
-                rsa.ImportParameters(rsaParams);
-                // This will throw if the signature is invalid
-                return Jose.JWT.Decode(token, rsa, Jose.JwsAlgorithm.RS256);
-            }
+            return Jose.JWT.Decode(token, _publicRSAProvider, Jose.JwsAlgorithm.RS256);
         }
     }
 }

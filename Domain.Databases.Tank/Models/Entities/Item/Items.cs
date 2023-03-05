@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Tank.Models.Entities.Character;
 
 namespace Tank.Models.Entities.Item
 {
-    [Table(nameof(Item), Schema = "Item")]
+    [Table(nameof(Items), Schema = "Item")]
     public class Items
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -19,9 +18,9 @@ namespace Tank.Models.Entities.Item
         public string? Remark { get; set; }
 
 
-        [ForeignKey(nameof(ItemsCategories))]
+        [ForeignKey(nameof(ItemsCategoriesTypes))]
         public int ItemsCategoryId { get; set; }
-        public virtual ItemsCategories ItemsCategory { get; set; } = null!;
+        public virtual ItemsCategoriesTypes ItemsCategory { get; set; } = null!;
 
 
         [Required]

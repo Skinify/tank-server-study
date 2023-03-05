@@ -17,10 +17,34 @@ namespace Tank.Migrations
                 name: "Character");
 
             migrationBuilder.EnsureSchema(
+                name: "Configurations");
+
+            migrationBuilder.EnsureSchema(
                 name: "Item");
 
             migrationBuilder.EnsureSchema(
-                name: "Server");
+                name: "Battle");
+
+            migrationBuilder.EnsureSchema(
+                name: "Battle.PVE");
+
+            migrationBuilder.EnsureSchema(
+                name: "Battle.PVP");
+
+            migrationBuilder.CreateTable(
+                name: "DefaultServerConfigs",
+                schema: "Configurations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DefaultServerConfigs", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "ItemBindTypes",
@@ -51,7 +75,7 @@ namespace Tank.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ItemsCategories",
+                name: "ItemsCategoriesTypes",
                 schema: "Item",
                 columns: table => new
                 {
@@ -62,7 +86,7 @@ namespace Tank.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ItemsCategories", x => x.Id);
+                    table.PrimaryKey("PK_ItemsCategoriesTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -77,6 +101,80 @@ namespace Tank.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Levels", x => x.Level);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Maps",
+                schema: "Battle",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ForePic = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BackPic = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Music = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Maps", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NPCs",
+                schema: "Battle.PVE",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Blood = table.Column<int>(type: "int", nullable: false),
+                    Attack = table.Column<int>(type: "int", nullable: false),
+                    Defense = table.Column<int>(type: "int", nullable: false),
+                    Agility = table.Column<int>(type: "int", nullable: false),
+                    Luck = table.Column<int>(type: "int", nullable: false),
+                    Hp = table.Column<int>(type: "int", nullable: false),
+                    Damage = table.Column<int>(type: "int", nullable: false),
+                    Guard = table.Column<int>(type: "int", nullable: false),
+                    Xp = table.Column<int>(type: "int", nullable: false),
+                    AttackRange = table.Column<int>(type: "int", nullable: true),
+                    MoveMax = table.Column<int>(type: "int", nullable: false),
+                    MoveMin = table.Column<int>(type: "int", nullable: false),
+                    MoveSpeed = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NPCs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PVEDifficultyTypes",
+                schema: "Battle",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PVEDifficultyTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PVEGames",
+                schema: "Battle.PVE",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MinLevel = table.Column<int>(type: "int", nullable: false),
+                    Picture = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PVEGames", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -100,35 +198,49 @@ namespace Tank.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ServerConfig",
-                schema: "Server",
+                name: "RateTypes",
+                schema: "Configurations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ServerConfig", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ServerStates",
-                schema: "Server",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ServerStates", x => x.Id);
+                    table.PrimaryKey("PK_RateTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Item",
+                name: "ShopCategoriesTypes",
+                schema: "Item",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShopCategoriesTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StageTypes",
+                schema: "Battle",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StageTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Items",
                 schema: "Item",
                 columns: table => new
                 {
@@ -162,55 +274,55 @@ namespace Tank.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Item", x => x.Id);
+                    table.PrimaryKey("PK_Items", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Item_ItemBindTypes_ItemBindTypeId",
+                        name: "FK_Items_ItemBindTypes_ItemBindTypeId",
                         column: x => x.ItemBindTypeId,
                         principalSchema: "Item",
                         principalTable: "ItemBindTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Item_ItemHoleTypes_Hole1Id",
+                        name: "FK_Items_ItemHoleTypes_Hole1Id",
                         column: x => x.Hole1Id,
                         principalSchema: "Item",
                         principalTable: "ItemHoleTypes",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Item_ItemHoleTypes_Hole2Id",
+                        name: "FK_Items_ItemHoleTypes_Hole2Id",
                         column: x => x.Hole2Id,
                         principalSchema: "Item",
                         principalTable: "ItemHoleTypes",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Item_ItemHoleTypes_Hole3Id",
+                        name: "FK_Items_ItemHoleTypes_Hole3Id",
                         column: x => x.Hole3Id,
                         principalSchema: "Item",
                         principalTable: "ItemHoleTypes",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Item_ItemHoleTypes_Hole4Id",
+                        name: "FK_Items_ItemHoleTypes_Hole4Id",
                         column: x => x.Hole4Id,
                         principalSchema: "Item",
                         principalTable: "ItemHoleTypes",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Item_ItemHoleTypes_Hole5Id",
+                        name: "FK_Items_ItemHoleTypes_Hole5Id",
                         column: x => x.Hole5Id,
                         principalSchema: "Item",
                         principalTable: "ItemHoleTypes",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Item_ItemHoleTypes_Hole6Id",
+                        name: "FK_Items_ItemHoleTypes_Hole6Id",
                         column: x => x.Hole6Id,
                         principalSchema: "Item",
                         principalTable: "ItemHoleTypes",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Item_ItemsCategories_ItemsCategoryId",
+                        name: "FK_Items_ItemsCategoriesTypes_ItemsCategoryId",
                         column: x => x.ItemsCategoryId,
                         principalSchema: "Item",
-                        principalTable: "ItemsCategories",
+                        principalTable: "ItemsCategoriesTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -230,7 +342,6 @@ namespace Tank.Migrations
                     Gold = table.Column<int>(type: "int", nullable: false),
                     Medals = table.Column<int>(type: "int", nullable: false),
                     Coupons = table.Column<int>(type: "int", nullable: false),
-                    TeacherId = table.Column<int>(type: "int", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     WinnedFights = table.Column<int>(type: "int", nullable: false),
                     TotalFights = table.Column<int>(type: "int", nullable: false)
@@ -238,12 +349,6 @@ namespace Tank.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Characters", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Characters_Characters_TeacherId",
-                        column: x => x.TeacherId,
-                        principalSchema: "Character",
-                        principalTable: "Characters",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Characters_Ranks_RankId",
                         column: x => x.RankId,
@@ -253,28 +358,104 @@ namespace Tank.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Servers",
-                schema: "Server",
+                name: "DefaultServerRates",
+                schema: "Configurations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Ip = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Port = table.Column<int>(type: "int", nullable: false),
-                    ServerStateId = table.Column<int>(type: "int", nullable: false),
-                    TotalCharacters = table.Column<int>(type: "int", nullable: false),
-                    TotalRooms = table.Column<int>(type: "int", nullable: false),
-                    Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AllowedLevel = table.Column<int>(type: "int", nullable: true)
+                    Rate = table.Column<double>(type: "float", nullable: false),
+                    AddDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BeginDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    RateTypeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Servers", x => x.Id);
+                    table.PrimaryKey("PK_DefaultServerRates", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Servers_ServerStates_ServerStateId",
-                        column: x => x.ServerStateId,
-                        principalSchema: "Server",
-                        principalTable: "ServerStates",
+                        name: "FK_DefaultServerRates_RateTypes_RateTypeId",
+                        column: x => x.RateTypeId,
+                        principalSchema: "Configurations",
+                        principalTable: "RateTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PVEStages",
+                schema: "Battle.PVE",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PVEId = table.Column<int>(type: "int", nullable: true),
+                    RoomTypesId = table.Column<int>(type: "int", nullable: false),
+                    RoomTypeId = table.Column<int>(type: "int", nullable: false),
+                    RoomDifficultyTypesId = table.Column<int>(type: "int", nullable: false),
+                    MapId = table.Column<int>(type: "int", nullable: false),
+                    Picture = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RecommendedStartLevel = table.Column<int>(type: "int", nullable: false),
+                    RecommendedEndLevel = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PVEStages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PVEStages_Maps_MapId",
+                        column: x => x.MapId,
+                        principalSchema: "Battle",
+                        principalTable: "Maps",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PVEStages_PVEDifficultyTypes_RoomDifficultyTypesId",
+                        column: x => x.RoomDifficultyTypesId,
+                        principalSchema: "Battle",
+                        principalTable: "PVEDifficultyTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PVEStages_PVEGames_PVEId",
+                        column: x => x.PVEId,
+                        principalSchema: "Battle.PVE",
+                        principalTable: "PVEGames",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PVEStages_StageTypes_RoomTypeId",
+                        column: x => x.RoomTypeId,
+                        principalSchema: "Battle",
+                        principalTable: "StageTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PVPStages",
+                schema: "Battle.PVP",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoomTypesId = table.Column<int>(type: "int", nullable: false),
+                    RoomTypeId = table.Column<int>(type: "int", nullable: false),
+                    MapId = table.Column<int>(type: "int", nullable: false),
+                    Picture = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PVPStages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PVPStages_Maps_MapId",
+                        column: x => x.MapId,
+                        principalSchema: "Battle",
+                        principalTable: "Maps",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PVPStages_StageTypes_RoomTypeId",
+                        column: x => x.RoomTypeId,
+                        principalSchema: "Battle",
+                        principalTable: "StageTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -292,34 +473,42 @@ namespace Tank.Migrations
                 {
                     table.PrimaryKey("PK_Cards", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Cards_Item_ItemId",
+                        name: "FK_Cards_Items_ItemId",
                         column: x => x.ItemId,
                         principalSchema: "Item",
-                        principalTable: "Item",
+                        principalTable: "Items",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CharacterMarriages",
-                schema: "Character",
+                name: "ShopItems",
+                schema: "Item",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PartnerId = table.Column<int>(type: "int", nullable: false),
+                    ItemId = table.Column<int>(type: "int", nullable: false),
+                    ShopCategoryId = table.Column<int>(type: "int", nullable: false),
+                    AddDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    WeddingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DivorceDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    IsLimitedOffer = table.Column<bool>(type: "bit", nullable: false),
+                    IsPromotion = table.Column<bool>(type: "bit", nullable: false),
+                    IsPopular = table.Column<bool>(type: "bit", nullable: false),
+                    IsNew = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CharacterMarriages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CharacterMarriages_Characters_PartnerId",
-                        column: x => x.PartnerId,
-                        principalSchema: "Character",
-                        principalTable: "Characters",
+                        name: "FK_ShopItems_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalSchema: "Item",
+                        principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ShopItems_ShopCategoriesTypes_ShopCategoryId",
+                        column: x => x.ShopCategoryId,
+                        principalSchema: "Item",
+                        principalTable: "ShopCategoriesTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -352,35 +541,31 @@ namespace Tank.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CharactersCustomizedItems",
+                name: "Disciples",
                 schema: "Character",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     CharacterId = table.Column<int>(type: "int", nullable: false),
-                    ItemId = table.Column<int>(type: "int", nullable: false),
-                    Color = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsHidden = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    RelationshipStartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RelationshipStartEnd = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_Disciples", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CharactersCustomizedItems_Characters_CharacterId",
+                        name: "FK_Disciples_Characters_CharacterId",
                         column: x => x.CharacterId,
                         principalSchema: "Character",
                         principalTable: "Characters",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CharactersCustomizedItems_Item_ItemId",
-                        column: x => x.ItemId,
-                        principalSchema: "Item",
-                        principalTable: "Item",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CharactersFriends",
+                name: "Friends",
                 schema: "Character",
                 columns: table => new
                 {
@@ -393,30 +578,10 @@ namespace Tank.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CharactersFriends", x => x.Id);
+                    table.PrimaryKey("PK_Friends", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CharactersFriends_Characters_CharacterId",
+                        name: "FK_Friends_Characters_CharacterId",
                         column: x => x.CharacterId,
-                        principalSchema: "Character",
-                        principalTable: "Characters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CharacterTeachers",
-                schema: "Character",
-                columns: table => new
-                {
-                    CharacterTeacherId = table.Column<int>(type: "int", nullable: false),
-                    RelationshipStartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    RelationshipStartEnd = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.ForeignKey(
-                        name: "FK_CharacterTeachers_Characters_CharacterTeacherId",
-                        column: x => x.CharacterTeacherId,
                         principalSchema: "Character",
                         principalTable: "Characters",
                         principalColumn: "Id",
@@ -454,6 +619,54 @@ namespace Tank.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Marriages",
+                schema: "Character",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PartnerId = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    WeddingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DivorceDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Marriages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Marriages_Characters_PartnerId",
+                        column: x => x.PartnerId,
+                        principalSchema: "Character",
+                        principalTable: "Characters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PVPGames",
+                schema: "Battle.PVP",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Picture = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PVPStages = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PVPGames", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PVPGames_PVPStages_PVPStages",
+                        column: x => x.PVPStages,
+                        principalSchema: "Battle.PVP",
+                        principalTable: "PVPStages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CharacterCards",
                 schema: "Character",
                 columns: table => new
@@ -481,6 +694,52 @@ namespace Tank.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Spaws",
+                schema: "Battle",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PosX = table.Column<int>(type: "int", nullable: false),
+                    PosY = table.Column<int>(type: "int", nullable: false),
+                    PVPGameId = table.Column<int>(type: "int", nullable: true),
+                    PVEGameId = table.Column<int>(type: "int", nullable: true),
+                    NPCId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Spaws", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Spaws_NPCs_NPCId",
+                        column: x => x.NPCId,
+                        principalSchema: "Battle.PVE",
+                        principalTable: "NPCs",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Spaws_PVEGames_PVEGameId",
+                        column: x => x.PVEGameId,
+                        principalSchema: "Battle.PVE",
+                        principalTable: "PVEGames",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Spaws_PVPGames_PVPGameId",
+                        column: x => x.PVPGameId,
+                        principalSchema: "Battle.PVP",
+                        principalTable: "PVPGames",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.InsertData(
+                schema: "Configurations",
+                table: "DefaultServerConfigs",
+                columns: new[] { "Id", "Description", "Name", "Value" },
+                values: new object[,]
+                {
+                    { 0, null, "PublicRSAKey", "-----BEGIN PUBLIC KEY-----\r\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAL1ezivGNWo8deIaiWOtukZ5hsczjqza\r\nuNeF0ieYdWN8fE6/YZpB4ZOyZiGhp8EfRlFpUjzPtw1i5CcA7K+SWHUCAwEAAQ==\r\n-----END PUBLIC KEY-----" },
+                    { 1, null, "PrivateRSAKey", "-----BEGIN RSA PRIVATE KEY-----\r\nMIIBOgIBAAJBAL1ezivGNWo8deIaiWOtukZ5hsczjqzauNeF0ieYdWN8fE6/YZpB\r\n4ZOyZiGhp8EfRlFpUjzPtw1i5CcA7K+SWHUCAwEAAQJAMLJxiDY3RDN6CQPT8ssZ\r\nDMhxjUZH2VGBmQKzsTT2cvd94bH7V4ETGv011Tv5d31eeMudGLkiwUMIQUVBq/ba\r\nPQIhAOLCUPZxw4v/e3GnRi8Zm31wymdGk40AFuPApAGNFbDnAiEA1co6HkX4psjf\r\ny+XzxcSPlojhiyb98CQV2x5akJz1FEMCIQCLQHVjwl0pvgzasLSi/ADGudsyLN8z\r\nuZhU6NpOsYtehQIgMFrAEG7VEawnai/FljqiG3M0SEv2baVLyDayVzkY+Y8CIBji\r\ngNSm2/bwJM4fYfSsHD2BXOTneOWWP9ZtM6i30gWC\r\n-----END RSA PRIVATE KEY-----" }
+                });
+
             migrationBuilder.InsertData(
                 schema: "Item",
                 table: "ItemBindTypes",
@@ -505,7 +764,7 @@ namespace Tank.Migrations
 
             migrationBuilder.InsertData(
                 schema: "Item",
-                table: "ItemsCategories",
+                table: "ItemsCategoriesTypes",
                 columns: new[] { "Id", "Name", "Place", "Remark" },
                 values: new object[,]
                 {
@@ -618,30 +877,17 @@ namespace Tank.Migrations
                 values: new object[] { 1, 0, 0, 0, 0, 0, 0, 0, "Novato" });
 
             migrationBuilder.InsertData(
-                schema: "Server",
-                table: "ServerConfig",
-                columns: new[] { "Id", "Description", "Name", "Value" },
+                schema: "Item",
+                table: "ShopCategoriesTypes",
+                columns: new[] { "Id", "Description", "Name" },
                 values: new object[,]
                 {
-                    { 0, null, "PublicRSAKey", "-----BEGIN PUBLIC KEY-----\r\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAL1ezivGNWo8deIaiWOtukZ5hsczjqza\r\nuNeF0ieYdWN8fE6/YZpB4ZOyZiGhp8EfRlFpUjzPtw1i5CcA7K+SWHUCAwEAAQ==\r\n-----END PUBLIC KEY-----" },
-                    { 1, null, "PrivateRSAKey", "-----BEGIN RSA PRIVATE KEY-----\r\nMIIBOgIBAAJBAL1ezivGNWo8deIaiWOtukZ5hsczjqzauNeF0ieYdWN8fE6/YZpB\r\n4ZOyZiGhp8EfRlFpUjzPtw1i5CcA7K+SWHUCAwEAAQJAMLJxiDY3RDN6CQPT8ssZ\r\nDMhxjUZH2VGBmQKzsTT2cvd94bH7V4ETGv011Tv5d31eeMudGLkiwUMIQUVBq/ba\r\nPQIhAOLCUPZxw4v/e3GnRi8Zm31wymdGk40AFuPApAGNFbDnAiEA1co6HkX4psjf\r\ny+XzxcSPlojhiyb98CQV2x5akJz1FEMCIQCLQHVjwl0pvgzasLSi/ADGudsyLN8z\r\nuZhU6NpOsYtehQIgMFrAEG7VEawnai/FljqiG3M0SEv2baVLyDayVzkY+Y8CIBji\r\ngNSm2/bwJM4fYfSsHD2BXOTneOWWP9ZtM6i30gWC\r\n-----END RSA PRIVATE KEY-----" }
+                    { 0, "Battle itens", "Battle itens" },
+                    { 1, "Dressing itens", "Dressing itens" },
+                    { 2, "Props itens", "Props itens" },
+                    { 3, "Exchange itens", "Exchange itens" },
+                    { 4, "Free itens", "Free itens" }
                 });
-
-            migrationBuilder.InsertData(
-                schema: "Server",
-                table: "ServerStates",
-                columns: new[] { "Id", "Description" },
-                values: new object[,]
-                {
-                    { 0, "Server online" },
-                    { 1, "Server offline" }
-                });
-
-            migrationBuilder.InsertData(
-                schema: "Server",
-                table: "Servers",
-                columns: new[] { "Id", "AllowedLevel", "Ip", "Name", "Port", "Remark", "ServerStateId", "TotalCharacters", "TotalRooms" },
-                values: new object[] { 0, null, "127.0.0.1", "Test server", 9202, null, 0, 0, 0 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cards_ItemId",
@@ -663,12 +909,6 @@ namespace Tank.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_CharacterMarriages_PartnerId",
-                schema: "Character",
-                table: "CharacterMarriages",
-                column: "PartnerId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CharacterRanks_CharacterId",
                 schema: "Character",
                 table: "CharacterRanks",
@@ -688,81 +928,69 @@ namespace Tank.Migrations
                 column: "RankId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Characters_TeacherId",
-                schema: "Character",
-                table: "Characters",
-                column: "TeacherId");
+                name: "IX_DefaultServerRates_RateTypeId",
+                schema: "Configurations",
+                table: "DefaultServerRates",
+                column: "RateTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CharactersCustomizedItems_CharacterId",
+                name: "IX_Disciples_CharacterId",
                 schema: "Character",
-                table: "CharactersCustomizedItems",
+                table: "Disciples",
                 column: "CharacterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CharactersCustomizedItems_ItemId",
+                name: "IX_Friends_CharacterId",
                 schema: "Character",
-                table: "CharactersCustomizedItems",
-                column: "ItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CharactersFriends_CharacterId",
-                schema: "Character",
-                table: "CharactersFriends",
+                table: "Friends",
                 column: "CharacterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CharacterTeachers_CharacterTeacherId",
-                schema: "Character",
-                table: "CharacterTeachers",
-                column: "CharacterTeacherId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Item_Hole1Id",
+                name: "IX_Items_Hole1Id",
                 schema: "Item",
-                table: "Item",
+                table: "Items",
                 column: "Hole1Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Item_Hole2Id",
+                name: "IX_Items_Hole2Id",
                 schema: "Item",
-                table: "Item",
+                table: "Items",
                 column: "Hole2Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Item_Hole3Id",
+                name: "IX_Items_Hole3Id",
                 schema: "Item",
-                table: "Item",
+                table: "Items",
                 column: "Hole3Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Item_Hole4Id",
+                name: "IX_Items_Hole4Id",
                 schema: "Item",
-                table: "Item",
+                table: "Items",
                 column: "Hole4Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Item_Hole5Id",
+                name: "IX_Items_Hole5Id",
                 schema: "Item",
-                table: "Item",
+                table: "Items",
                 column: "Hole5Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Item_Hole6Id",
+                name: "IX_Items_Hole6Id",
                 schema: "Item",
-                table: "Item",
+                table: "Items",
                 column: "Hole6Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Item_ItemBindTypeId",
+                name: "IX_Items_ItemBindTypeId",
                 schema: "Item",
-                table: "Item",
+                table: "Items",
                 column: "ItemBindTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Item_ItemsCategoryId",
+                name: "IX_Items_ItemsCategoryId",
                 schema: "Item",
-                table: "Item",
+                table: "Items",
                 column: "ItemsCategoryId");
 
             migrationBuilder.CreateIndex(
@@ -778,10 +1006,82 @@ namespace Tank.Migrations
                 column: "ToCharacterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Servers_ServerStateId",
-                schema: "Server",
-                table: "Servers",
-                column: "ServerStateId");
+                name: "IX_Marriages_PartnerId",
+                schema: "Character",
+                table: "Marriages",
+                column: "PartnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PVEStages_MapId",
+                schema: "Battle.PVE",
+                table: "PVEStages",
+                column: "MapId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PVEStages_PVEId",
+                schema: "Battle.PVE",
+                table: "PVEStages",
+                column: "PVEId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PVEStages_RoomDifficultyTypesId",
+                schema: "Battle.PVE",
+                table: "PVEStages",
+                column: "RoomDifficultyTypesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PVEStages_RoomTypeId",
+                schema: "Battle.PVE",
+                table: "PVEStages",
+                column: "RoomTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PVPGames_PVPStages",
+                schema: "Battle.PVP",
+                table: "PVPGames",
+                column: "PVPStages");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PVPStages_MapId",
+                schema: "Battle.PVP",
+                table: "PVPStages",
+                column: "MapId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PVPStages_RoomTypeId",
+                schema: "Battle.PVP",
+                table: "PVPStages",
+                column: "RoomTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShopItems_ItemId",
+                schema: "Item",
+                table: "ShopItems",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShopItems_ShopCategoryId",
+                schema: "Item",
+                table: "ShopItems",
+                column: "ShopCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Spaws_NPCId",
+                schema: "Battle",
+                table: "Spaws",
+                column: "NPCId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Spaws_PVEGameId",
+                schema: "Battle",
+                table: "Spaws",
+                column: "PVEGameId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Spaws_PVPGameId",
+                schema: "Battle",
+                table: "Spaws",
+                column: "PVPGameId");
         }
 
         /// <inheritdoc />
@@ -792,23 +1092,23 @@ namespace Tank.Migrations
                 schema: "Character");
 
             migrationBuilder.DropTable(
-                name: "CharacterMarriages",
-                schema: "Character");
-
-            migrationBuilder.DropTable(
                 name: "CharacterRanks",
                 schema: "Character");
 
             migrationBuilder.DropTable(
-                name: "CharactersCustomizedItems",
+                name: "DefaultServerConfigs",
+                schema: "Configurations");
+
+            migrationBuilder.DropTable(
+                name: "DefaultServerRates",
+                schema: "Configurations");
+
+            migrationBuilder.DropTable(
+                name: "Disciples",
                 schema: "Character");
 
             migrationBuilder.DropTable(
-                name: "CharactersFriends",
-                schema: "Character");
-
-            migrationBuilder.DropTable(
-                name: "CharacterTeachers",
+                name: "Friends",
                 schema: "Character");
 
             migrationBuilder.DropTable(
@@ -820,32 +1120,64 @@ namespace Tank.Migrations
                 schema: "Character");
 
             migrationBuilder.DropTable(
-                name: "ServerConfig",
-                schema: "Server");
+                name: "Marriages",
+                schema: "Character");
 
             migrationBuilder.DropTable(
-                name: "Servers",
-                schema: "Server");
+                name: "PVEStages",
+                schema: "Battle.PVE");
+
+            migrationBuilder.DropTable(
+                name: "ShopItems",
+                schema: "Item");
+
+            migrationBuilder.DropTable(
+                name: "Spaws",
+                schema: "Battle");
 
             migrationBuilder.DropTable(
                 name: "Cards",
                 schema: "Character");
 
             migrationBuilder.DropTable(
+                name: "RateTypes",
+                schema: "Configurations");
+
+            migrationBuilder.DropTable(
                 name: "Characters",
                 schema: "Character");
 
             migrationBuilder.DropTable(
-                name: "ServerStates",
-                schema: "Server");
+                name: "PVEDifficultyTypes",
+                schema: "Battle");
 
             migrationBuilder.DropTable(
-                name: "Item",
+                name: "ShopCategoriesTypes",
+                schema: "Item");
+
+            migrationBuilder.DropTable(
+                name: "NPCs",
+                schema: "Battle.PVE");
+
+            migrationBuilder.DropTable(
+                name: "PVEGames",
+                schema: "Battle.PVE");
+
+            migrationBuilder.DropTable(
+                name: "PVPGames",
+                schema: "Battle.PVP");
+
+            migrationBuilder.DropTable(
+                name: "Items",
                 schema: "Item");
 
             migrationBuilder.DropTable(
                 name: "Ranks",
                 schema: "Character");
+
+            migrationBuilder.DropTable(
+                name: "PVPStages",
+                schema: "Battle.PVP");
 
             migrationBuilder.DropTable(
                 name: "ItemBindTypes",
@@ -856,8 +1188,16 @@ namespace Tank.Migrations
                 schema: "Item");
 
             migrationBuilder.DropTable(
-                name: "ItemsCategories",
+                name: "ItemsCategoriesTypes",
                 schema: "Item");
+
+            migrationBuilder.DropTable(
+                name: "Maps",
+                schema: "Battle");
+
+            migrationBuilder.DropTable(
+                name: "StageTypes",
+                schema: "Battle");
         }
     }
 }

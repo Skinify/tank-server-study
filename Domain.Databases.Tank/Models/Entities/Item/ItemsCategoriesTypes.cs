@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Tank.Models.Entities.Item
 {
-    [Table(nameof(ItemsCategories), Schema = "Item")]
-    public class ItemsCategories
+    [Table(nameof(ItemsCategoriesTypes), Schema = "Item")]
+    public class ItemsCategoriesTypes
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }

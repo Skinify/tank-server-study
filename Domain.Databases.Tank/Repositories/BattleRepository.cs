@@ -1,35 +1,30 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Tank.Models.Entities.Server;
+using Tank.Models.Entities.Configurations;
 using Tank.Repositories._Interface;
 
 namespace Tank.Repositories
 {
-    public class ServerRepository : IServerRepository
+    public class BattleRepository : IBattleRepository
     {
         private readonly TankContext _tankContext;
-        public ServerRepository(TankContext tankContext)
+        public BattleRepository(TankContext tankContext)
         {
             _tankContext = tankContext;
         }
 
-        public async Task<ServerConfigs?> GetServerConfigById(int configId)
+        public async Task<DefaultServerConfigs?> GetServerConfigById(int configId)
         {
             return await _tankContext.ServerConfig.FirstOrDefaultAsync(r => r.Id == configId);
         }
 
-        public async Task<ServerConfigs?> GetServerConfigByName(string configName)
+        public async Task<DefaultServerConfigs?> GetServerConfigByName(string configName)
         {
             return await _tankContext.ServerConfig.FirstOrDefaultAsync(r => r.Name == configName);
         }
 
-        public async Task<IList<ServerConfigs>> GetServerConfigs()
+        public async Task<IList<DefaultServerConfigs>> GetServerConfigs()
         {
             return await _tankContext.ServerConfig.ToListAsync();
-        }
-
-        public async Task<IList<Servers>> GetServerList()
-        {
-            return new List<Servers>();
         }
     }
 }

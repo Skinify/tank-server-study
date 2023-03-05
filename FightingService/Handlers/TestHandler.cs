@@ -14,7 +14,6 @@ namespace FightingService.Handlers
         public async Task<ServerPacketOut?> Handle(BasePacketIn packetIn)
         {
             var tank = _serviceProvider.GetRequiredService<TankUnityOfWork>();
-            var serverList = await tank.ServerRepository.GetServerList();
             var @int1 = packetIn.ReadInt();
             var @int2 = packetIn.ReadInt();
             var @int3StringlENGHT = packetIn.ReadInt();

@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Tank.Models.Entities.Character
 {
-    [Table(nameof(CharacterMarriages), Schema = "Character")]
+    [Table(nameof(Marriages), Schema = "Character")]
     [Index(nameof(PartnerId), IsUnique = false)]
-    public class CharacterMarriages
+    public class Marriages
     {
         [Key]
         public int Id { get; set; }

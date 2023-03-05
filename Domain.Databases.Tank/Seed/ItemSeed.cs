@@ -24,41 +24,52 @@ namespace Tank.Seed
             );
         }
 
+        public static void SeedShopCategoryTypes(this ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ShopCategoriesTypes>().HasData(
+                new ShopCategoriesTypes { Id = (int)EShopCategoriesTypes.BATTLE, Name= "Battle itens", Description = "Battle itens" },
+                new ShopCategoriesTypes { Id = (int)EShopCategoriesTypes.DRESS, Name = "Dressing itens", Description = "Dressing itens" },
+                new ShopCategoriesTypes { Id = (int)EShopCategoriesTypes.PROPS, Name = "Props itens", Description = "Props itens" },
+                new ShopCategoriesTypes { Id = (int)EShopCategoriesTypes.EXCHANGE, Name = "Exchange itens", Description = "Exchange itens" },
+                new ShopCategoriesTypes { Id = (int)EShopCategoriesTypes.FREE, Name = "Free itens", Description = "Free itens" }
+            );
+        }
+
         public static void SeedItemsCategory(this ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ItemsCategories>().HasData(
-                new ItemsCategories { Id = 1, Name = "Chapéu", Place = 1 },
-                new ItemsCategories { Id = 2, Name = "Óculos", Place = 2 },
-                new ItemsCategories { Id = 3, Name = "Cabelo", Place = 3 },
-                new ItemsCategories { Id = 4, Name = "Face", Place = 4 },
-                new ItemsCategories { Id = 5, Name = "Roupa", Place = 5 },
-                new ItemsCategories { Id = 6, Name = "Olhos", Place = 6 },
-                new ItemsCategories { Id = 7, Name = "Arma", Place = 7 },
-                new ItemsCategories { Id = 8, Name = "Pulseiras", Place = 8 },
-                new ItemsCategories { Id = 9, Name = "Anéis", Place = 9 },
-                new ItemsCategories { Id = 10, Name = "Itens de combate" },
-                new ItemsCategories { Id = 11, Name = "Itens de auxílio" },
-                new ItemsCategories { Id = 12, Name = "Itens de Tarefa" },
-                new ItemsCategories { Id = 13, Name = "Terno", Place = 11 },
-                new ItemsCategories { Id = 14, Name = "Colar", Place = 12 },
-                new ItemsCategories { Id = 15, Name = "Decoração", Place = 13 },
-                new ItemsCategories { Id = 16, Name = "Bolha", Place = 14 },
-                new ItemsCategories { Id = 17, Name = "Itens auxiliares", Place = 15 },
-                new ItemsCategories { Id = 18, Name = "Baú de Cartões" },
-                new ItemsCategories { Id = 19, Name = "Ajuda", Place = 16 },
-                new ItemsCategories { Id = 20, Name = "Poção de Prática" },
-                new ItemsCategories { Id = 23, Name = "Inventário de Missões Práticas" },
-                new ItemsCategories { Id = 25, Name = "Baú de Cartões" },
-                new ItemsCategories { Id = 27, Name = "Armas especiais", Place = 27 },
-                new ItemsCategories { Id = 30, Name = "Propriedade especial" },
-                new ItemsCategories { Id = 31, Name = "Mão Secundária Especial" },
-                new ItemsCategories { Id = 32, Name = "Sementes" },
-                new ItemsCategories { Id = 33, Name = "Fertilizante" },
-                new ItemsCategories { Id = 34, Name = "Alimento de mascote" },
-                new ItemsCategories { Id = 35, Name = "Ovo mascote" },
-                new ItemsCategories { Id = 36, Name = "Colheita" },
-                new ItemsCategories { Id = 50, Name = "Arma mascote" },
-                new ItemsCategories { Id = 51, Name = "Chapéu mascote" }
+            modelBuilder.Entity<ItemsCategoriesTypes>().HasData(
+                new ItemsCategoriesTypes { Id = 1, Name = "Chapéu", Place = 1 },
+                new ItemsCategoriesTypes { Id = 2, Name = "Óculos", Place = 2 },
+                new ItemsCategoriesTypes { Id = 3, Name = "Cabelo", Place = 3 },
+                new ItemsCategoriesTypes { Id = 4, Name = "Face", Place = 4 },
+                new ItemsCategoriesTypes { Id = 5, Name = "Roupa", Place = 5 },
+                new ItemsCategoriesTypes { Id = 6, Name = "Olhos", Place = 6 },
+                new ItemsCategoriesTypes { Id = 7, Name = "Arma", Place = 7 },
+                new ItemsCategoriesTypes { Id = 8, Name = "Pulseiras", Place = 8 },
+                new ItemsCategoriesTypes { Id = 9, Name = "Anéis", Place = 9 },
+                new ItemsCategoriesTypes { Id = 10, Name = "Itens de combate" },
+                new ItemsCategoriesTypes { Id = 11, Name = "Itens de auxílio" },
+                new ItemsCategoriesTypes { Id = 12, Name = "Itens de Tarefa" },
+                new ItemsCategoriesTypes { Id = 13, Name = "Terno", Place = 11 },
+                new ItemsCategoriesTypes { Id = 14, Name = "Colar", Place = 12 },
+                new ItemsCategoriesTypes { Id = 15, Name = "Decoração", Place = 13 },
+                new ItemsCategoriesTypes { Id = 16, Name = "Bolha", Place = 14 },
+                new ItemsCategoriesTypes { Id = 17, Name = "Itens auxiliares", Place = 15 },
+                new ItemsCategoriesTypes { Id = 18, Name = "Baú de Cartões" },
+                new ItemsCategoriesTypes { Id = 19, Name = "Ajuda", Place = 16 },
+                new ItemsCategoriesTypes { Id = 20, Name = "Poção de Prática" },
+                new ItemsCategoriesTypes { Id = 23, Name = "Inventário de Missões Práticas" },
+                new ItemsCategoriesTypes { Id = 25, Name = "Baú de Cartões" },
+                new ItemsCategoriesTypes { Id = 27, Name = "Armas especiais", Place = 27 },
+                new ItemsCategoriesTypes { Id = 30, Name = "Propriedade especial" },
+                new ItemsCategoriesTypes { Id = 31, Name = "Mão Secundária Especial" },
+                new ItemsCategoriesTypes { Id = 32, Name = "Sementes" },
+                new ItemsCategoriesTypes { Id = 33, Name = "Fertilizante" },
+                new ItemsCategoriesTypes { Id = 34, Name = "Alimento de mascote" },
+                new ItemsCategoriesTypes { Id = 35, Name = "Ovo mascote" },
+                new ItemsCategoriesTypes { Id = 36, Name = "Colheita" },
+                new ItemsCategoriesTypes { Id = 50, Name = "Arma mascote" },
+                new ItemsCategoriesTypes { Id = 51, Name = "Chapéu mascote" }
             );
         }
     }

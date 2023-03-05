@@ -14,7 +14,7 @@ namespace RoadService.Managers
 
         public async Task Start()
         {
-            var configs = await _tankUnityOfWork.ServerRepository.GetServerConfigs();
+            var configs = await _tankUnityOfWork.ConfigurationRepository.GetServerConfigs();
             GameProperties.InitializeGameProperties(configs.ToDictionary(r => r.Name, r => (object)r.Value));
         }
 

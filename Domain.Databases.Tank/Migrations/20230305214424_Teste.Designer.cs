@@ -12,7 +12,7 @@ using Tank;
 namespace Tank.Migrations
 {
     [DbContext(typeof(TankContext))]
-    [Migration("20230304212858_Teste")]
+    [Migration("20230305214424_Teste")]
     partial class Teste
     {
         /// <inheritdoc />
@@ -24,6 +24,289 @@ namespace Tank.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Tank.Models.Entities.Battle.Maps", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BackPic")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ForePic")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Music")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Maps", "Battle");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Battle.PVE.NPCs", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Agility")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Attack")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AttackRange")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Blood")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Damage")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Defense")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Guard")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Hp")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Luck")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MoveMax")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MoveMin")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MoveSpeed")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Xp")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NPCs", "Battle.PVE");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Battle.PVE.PVEDifficultyTypes", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PVEDifficultyTypes", "Battle");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Battle.PVE.PVEGames", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MinLevel")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Picture")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PVEGames", "Battle.PVE");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Battle.PVE.PVEStages", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MapId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PVEId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Picture")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RecommendedEndLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecommendedStartLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoomDifficultyTypesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoomTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoomTypesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MapId");
+
+                    b.HasIndex("PVEId");
+
+                    b.HasIndex("RoomDifficultyTypesId");
+
+                    b.HasIndex("RoomTypeId");
+
+                    b.ToTable("PVEStages", "Battle.PVE");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Battle.PVP.PVPGames", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PVPStages")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Picture")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PVPStages");
+
+                    b.ToTable("PVPGames", "Battle.PVP");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Battle.PVP.PVPStages", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MapId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Picture")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoomTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoomTypesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MapId");
+
+                    b.HasIndex("RoomTypeId");
+
+                    b.ToTable("PVPStages", "Battle.PVP");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Battle.Spaws", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("NPCId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PVEGameId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PVPGameId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PosX")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PosY")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NPCId");
+
+                    b.HasIndex("PVEGameId");
+
+                    b.HasIndex("PVPGameId");
+
+                    b.ToTable("Spaws", "Battle");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Battle.StageTypes", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StageTypes", "Battle");
+                });
 
             modelBuilder.Entity("Tank.Models.Entities.Character.Cards", b =>
                 {
@@ -66,33 +349,6 @@ namespace Tank.Migrations
                     b.ToTable("CharacterCards", "Character");
                 });
 
-            modelBuilder.Entity("Tank.Models.Entities.Character.CharacterMarriages", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("DivorceDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("PartnerId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("WeddingDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PartnerId");
-
-                    b.ToTable("CharacterMarriages", "Character");
-                });
-
             modelBuilder.Entity("Tank.Models.Entities.Character.CharacterRanks", b =>
                 {
                     b.Property<DateTime>("AcquisitionDate")
@@ -110,22 +366,6 @@ namespace Tank.Migrations
                         .IsUnique();
 
                     b.ToTable("CharacterRanks", "Character");
-                });
-
-            modelBuilder.Entity("Tank.Models.Entities.Character.CharacterTeachers", b =>
-                {
-                    b.Property<int>("CharacterTeacherId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("RelationshipStartEnd")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("RelationshipStartTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasIndex("CharacterTeacherId");
-
-                    b.ToTable("CharacterTeachers", "Character");
                 });
 
             modelBuilder.Entity("Tank.Models.Entities.Character.Characters", b =>
@@ -161,9 +401,6 @@ namespace Tank.Migrations
                     b.Property<bool>("Sex")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("TeacherId")
-                        .HasColumnType("int");
-
                     b.Property<int>("TotalFights")
                         .HasColumnType("int");
 
@@ -177,33 +414,37 @@ namespace Tank.Migrations
 
                     b.HasIndex("RankId");
 
-                    b.HasIndex("TeacherId");
-
                     b.ToTable("Characters", "Character");
                 });
 
-            modelBuilder.Entity("Tank.Models.Entities.Character.CharactersCustomizedItems", b =>
+            modelBuilder.Entity("Tank.Models.Entities.Character.Disciples", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("CharacterId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Color")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsHidden")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("RelationshipStartEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("RelationshipStartTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("CharacterId");
 
-                    b.HasIndex("ItemId");
-
-                    b.ToTable("CharactersCustomizedItems", "Character");
+                    b.ToTable("Disciples", "Character");
                 });
 
-            modelBuilder.Entity("Tank.Models.Entities.Character.CharactersFriends", b =>
+            modelBuilder.Entity("Tank.Models.Entities.Character.Friends", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -227,7 +468,7 @@ namespace Tank.Migrations
 
                     b.HasIndex("CharacterId");
 
-                    b.ToTable("CharactersFriends", "Character");
+                    b.ToTable("Friends", "Character");
                 });
 
             modelBuilder.Entity("Tank.Models.Entities.Character.Levels", b =>
@@ -640,6 +881,33 @@ namespace Tank.Migrations
                     b.ToTable("MarriageProposals", "Character");
                 });
 
+            modelBuilder.Entity("Tank.Models.Entities.Character.Marriages", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("DivorceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PartnerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("WeddingDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartnerId");
+
+                    b.ToTable("Marriages", "Character");
+                });
+
             modelBuilder.Entity("Tank.Models.Entities.Character.Ranks", b =>
                 {
                     b.Property<int>("Id")
@@ -687,6 +955,85 @@ namespace Tank.Migrations
                             Luck = 0,
                             Name = "Novato"
                         });
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Configurations.DefaultServerConfigs", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DefaultServerConfigs", "Configurations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 0,
+                            Name = "PublicRSAKey",
+                            Value = "-----BEGIN PUBLIC KEY-----\r\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAL1ezivGNWo8deIaiWOtukZ5hsczjqza\r\nuNeF0ieYdWN8fE6/YZpB4ZOyZiGhp8EfRlFpUjzPtw1i5CcA7K+SWHUCAwEAAQ==\r\n-----END PUBLIC KEY-----"
+                        },
+                        new
+                        {
+                            Id = 1,
+                            Name = "PrivateRSAKey",
+                            Value = "-----BEGIN RSA PRIVATE KEY-----\r\nMIIBOgIBAAJBAL1ezivGNWo8deIaiWOtukZ5hsczjqzauNeF0ieYdWN8fE6/YZpB\r\n4ZOyZiGhp8EfRlFpUjzPtw1i5CcA7K+SWHUCAwEAAQJAMLJxiDY3RDN6CQPT8ssZ\r\nDMhxjUZH2VGBmQKzsTT2cvd94bH7V4ETGv011Tv5d31eeMudGLkiwUMIQUVBq/ba\r\nPQIhAOLCUPZxw4v/e3GnRi8Zm31wymdGk40AFuPApAGNFbDnAiEA1co6HkX4psjf\r\ny+XzxcSPlojhiyb98CQV2x5akJz1FEMCIQCLQHVjwl0pvgzasLSi/ADGudsyLN8z\r\nuZhU6NpOsYtehQIgMFrAEG7VEawnai/FljqiG3M0SEv2baVLyDayVzkY+Y8CIBji\r\ngNSm2/bwJM4fYfSsHD2BXOTneOWWP9ZtM6i30gWC\r\n-----END RSA PRIVATE KEY-----"
+                        });
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Configurations.DefaultServerRates", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("AddDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("BeginDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Rate")
+                        .HasColumnType("float");
+
+                    b.Property<int>("RateTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RateTypeId");
+
+                    b.ToTable("DefaultServerRates", "Configurations");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Configurations.RateTypes", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RateTypes", "Configurations");
                 });
 
             modelBuilder.Entity("Tank.Models.Entities.Item.ItemBindTypes", b =>
@@ -864,10 +1211,10 @@ namespace Tank.Migrations
 
                     b.HasIndex("ItemsCategoryId");
 
-                    b.ToTable("Item", "Item");
+                    b.ToTable("Items", "Item");
                 });
 
-            modelBuilder.Entity("Tank.Models.Entities.Item.ItemsCategories", b =>
+            modelBuilder.Entity("Tank.Models.Entities.Item.ItemsCategoriesTypes", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -885,7 +1232,7 @@ namespace Tank.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ItemsCategories", "Item");
+                    b.ToTable("ItemsCategoriesTypes", "Item");
 
                     b.HasData(
                         new
@@ -1066,75 +1413,12 @@ namespace Tank.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Tank.Models.Entities.Server.ServerConfigs", b =>
+            modelBuilder.Entity("Tank.Models.Entities.Item.ShopCategoriesTypes", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ServerConfig", "Server");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 0,
-                            Name = "PublicRSAKey",
-                            Value = "-----BEGIN PUBLIC KEY-----\r\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAL1ezivGNWo8deIaiWOtukZ5hsczjqza\r\nuNeF0ieYdWN8fE6/YZpB4ZOyZiGhp8EfRlFpUjzPtw1i5CcA7K+SWHUCAwEAAQ==\r\n-----END PUBLIC KEY-----"
-                        },
-                        new
-                        {
-                            Id = 1,
-                            Name = "PrivateRSAKey",
-                            Value = "-----BEGIN RSA PRIVATE KEY-----\r\nMIIBOgIBAAJBAL1ezivGNWo8deIaiWOtukZ5hsczjqzauNeF0ieYdWN8fE6/YZpB\r\n4ZOyZiGhp8EfRlFpUjzPtw1i5CcA7K+SWHUCAwEAAQJAMLJxiDY3RDN6CQPT8ssZ\r\nDMhxjUZH2VGBmQKzsTT2cvd94bH7V4ETGv011Tv5d31eeMudGLkiwUMIQUVBq/ba\r\nPQIhAOLCUPZxw4v/e3GnRi8Zm31wymdGk40AFuPApAGNFbDnAiEA1co6HkX4psjf\r\ny+XzxcSPlojhiyb98CQV2x5akJz1FEMCIQCLQHVjwl0pvgzasLSi/ADGudsyLN8z\r\nuZhU6NpOsYtehQIgMFrAEG7VEawnai/FljqiG3M0SEv2baVLyDayVzkY+Y8CIBji\r\ngNSm2/bwJM4fYfSsHD2BXOTneOWWP9ZtM6i30gWC\r\n-----END RSA PRIVATE KEY-----"
-                        });
-                });
-
-            modelBuilder.Entity("Tank.Models.Entities.Server.ServerStates", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ServerStates", "Server");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Server offline"
-                        },
-                        new
-                        {
-                            Id = 0,
-                            Description = "Server online"
-                        });
-                });
-
-            modelBuilder.Entity("Tank.Models.Entities.Server.Servers", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("AllowedLevel")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Ip")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -1142,38 +1426,158 @@ namespace Tank.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Port")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Remark")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ServerStateId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalCharacters")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalRooms")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ServerStateId");
-
-                    b.ToTable("Servers", "Server");
+                    b.ToTable("ShopCategoriesTypes", "Item");
 
                     b.HasData(
                         new
                         {
                             Id = 0,
-                            Ip = "127.0.0.1",
-                            Name = "Test server",
-                            Port = 9202,
-                            ServerStateId = 0,
-                            TotalCharacters = 0,
-                            TotalRooms = 0
+                            Description = "Battle itens",
+                            Name = "Battle itens"
+                        },
+                        new
+                        {
+                            Id = 1,
+                            Description = "Dressing itens",
+                            Name = "Dressing itens"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Props itens",
+                            Name = "Props itens"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Exchange itens",
+                            Name = "Exchange itens"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Free itens",
+                            Name = "Free itens"
                         });
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Item.ShopItems", b =>
+                {
+                    b.Property<DateTime>("AddDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsLimitedOffer")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNew")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPopular")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPromotion")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShopCategoryId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("ShopCategoryId");
+
+                    b.ToTable("ShopItems", "Item");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Battle.PVE.PVEStages", b =>
+                {
+                    b.HasOne("Tank.Models.Entities.Battle.Maps", "Maps")
+                        .WithMany()
+                        .HasForeignKey("MapId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tank.Models.Entities.Battle.PVE.PVEGames", "PVE")
+                        .WithMany("Stages")
+                        .HasForeignKey("PVEId");
+
+                    b.HasOne("Tank.Models.Entities.Battle.PVE.PVEDifficultyTypes", "RoomDifficultyTypes")
+                        .WithMany()
+                        .HasForeignKey("RoomDifficultyTypesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tank.Models.Entities.Battle.StageTypes", "RoomType")
+                        .WithMany()
+                        .HasForeignKey("RoomTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Maps");
+
+                    b.Navigation("PVE");
+
+                    b.Navigation("RoomDifficultyTypes");
+
+                    b.Navigation("RoomType");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Battle.PVP.PVPGames", b =>
+                {
+                    b.HasOne("Tank.Models.Entities.Battle.PVP.PVPStages", "Stage")
+                        .WithMany()
+                        .HasForeignKey("PVPStages")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Stage");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Battle.PVP.PVPStages", b =>
+                {
+                    b.HasOne("Tank.Models.Entities.Battle.Maps", "Maps")
+                        .WithMany()
+                        .HasForeignKey("MapId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tank.Models.Entities.Battle.StageTypes", "RoomType")
+                        .WithMany()
+                        .HasForeignKey("RoomTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Maps");
+
+                    b.Navigation("RoomType");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Battle.Spaws", b =>
+                {
+                    b.HasOne("Tank.Models.Entities.Battle.PVE.NPCs", "NPC")
+                        .WithMany("Spaws")
+                        .HasForeignKey("NPCId");
+
+                    b.HasOne("Tank.Models.Entities.Battle.PVE.PVEGames", "PVEGame")
+                        .WithMany("AdventuresSpawns")
+                        .HasForeignKey("PVEGameId");
+
+                    b.HasOne("Tank.Models.Entities.Battle.PVP.PVPGames", "PVPGame")
+                        .WithMany("CompetitorSpawns")
+                        .HasForeignKey("PVPGameId");
+
+                    b.Navigation("NPC");
+
+                    b.Navigation("PVEGame");
+
+                    b.Navigation("PVPGame");
                 });
 
             modelBuilder.Entity("Tank.Models.Entities.Character.Cards", b =>
@@ -1206,17 +1610,6 @@ namespace Tank.Migrations
                     b.Navigation("Character");
                 });
 
-            modelBuilder.Entity("Tank.Models.Entities.Character.CharacterMarriages", b =>
-                {
-                    b.HasOne("Tank.Models.Entities.Character.Characters", "Partner")
-                        .WithMany("Marriages")
-                        .HasForeignKey("PartnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Partner");
-                });
-
             modelBuilder.Entity("Tank.Models.Entities.Character.CharacterRanks", b =>
                 {
                     b.HasOne("Tank.Models.Entities.Character.Characters", "Character")
@@ -1236,52 +1629,27 @@ namespace Tank.Migrations
                     b.Navigation("Rank");
                 });
 
-            modelBuilder.Entity("Tank.Models.Entities.Character.CharacterTeachers", b =>
-                {
-                    b.HasOne("Tank.Models.Entities.Character.Characters", "CharacterTeacher")
-                        .WithMany()
-                        .HasForeignKey("CharacterTeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CharacterTeacher");
-                });
-
             modelBuilder.Entity("Tank.Models.Entities.Character.Characters", b =>
                 {
                     b.HasOne("Tank.Models.Entities.Character.Ranks", "Rank")
                         .WithMany()
                         .HasForeignKey("RankId");
 
-                    b.HasOne("Tank.Models.Entities.Character.Characters", "Teacher")
-                        .WithMany()
-                        .HasForeignKey("TeacherId");
-
                     b.Navigation("Rank");
-
-                    b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("Tank.Models.Entities.Character.CharactersCustomizedItems", b =>
+            modelBuilder.Entity("Tank.Models.Entities.Character.Disciples", b =>
                 {
                     b.HasOne("Tank.Models.Entities.Character.Characters", "Character")
-                        .WithMany()
+                        .WithMany("Disciples")
                         .HasForeignKey("CharacterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tank.Models.Entities.Item.Items", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Character");
-
-                    b.Navigation("Item");
                 });
 
-            modelBuilder.Entity("Tank.Models.Entities.Character.CharactersFriends", b =>
+            modelBuilder.Entity("Tank.Models.Entities.Character.Friends", b =>
                 {
                     b.HasOne("Tank.Models.Entities.Character.Characters", "Character")
                         .WithMany("Friends")
@@ -1309,6 +1677,28 @@ namespace Tank.Migrations
                     b.Navigation("FromCharacter");
 
                     b.Navigation("ToCharacter");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Character.Marriages", b =>
+                {
+                    b.HasOne("Tank.Models.Entities.Character.Characters", "Partner")
+                        .WithMany("Marriages")
+                        .HasForeignKey("PartnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Partner");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Configurations.DefaultServerRates", b =>
+                {
+                    b.HasOne("Tank.Models.Entities.Configurations.RateTypes", "RateType")
+                        .WithMany()
+                        .HasForeignKey("RateTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RateType");
                 });
 
             modelBuilder.Entity("Tank.Models.Entities.Item.Items", b =>
@@ -1343,7 +1733,7 @@ namespace Tank.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tank.Models.Entities.Item.ItemsCategories", "ItemsCategory")
+                    b.HasOne("Tank.Models.Entities.Item.ItemsCategoriesTypes", "ItemsCategory")
                         .WithMany()
                         .HasForeignKey("ItemsCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1366,19 +1756,46 @@ namespace Tank.Migrations
                     b.Navigation("ItemsCategory");
                 });
 
-            modelBuilder.Entity("Tank.Models.Entities.Server.Servers", b =>
+            modelBuilder.Entity("Tank.Models.Entities.Item.ShopItems", b =>
                 {
-                    b.HasOne("Tank.Models.Entities.Server.ServerStates", "ServerState")
+                    b.HasOne("Tank.Models.Entities.Item.Items", "Item")
                         .WithMany()
-                        .HasForeignKey("ServerStateId")
+                        .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ServerState");
+                    b.HasOne("Tank.Models.Entities.Item.ShopCategoriesTypes", "ShopCategory")
+                        .WithMany()
+                        .HasForeignKey("ShopCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+
+                    b.Navigation("ShopCategory");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Battle.PVE.NPCs", b =>
+                {
+                    b.Navigation("Spaws");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Battle.PVE.PVEGames", b =>
+                {
+                    b.Navigation("AdventuresSpawns");
+
+                    b.Navigation("Stages");
+                });
+
+            modelBuilder.Entity("Tank.Models.Entities.Battle.PVP.PVPGames", b =>
+                {
+                    b.Navigation("CompetitorSpawns");
                 });
 
             modelBuilder.Entity("Tank.Models.Entities.Character.Characters", b =>
                 {
+                    b.Navigation("Disciples");
+
                     b.Navigation("Friends");
 
                     b.Navigation("Marriages");

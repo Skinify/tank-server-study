@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Tank.Models.Entities.Character
 {
-    [Table(nameof(CharactersFriends), Schema = "Character")]
-    public class CharactersFriends
+    [Table(nameof(Disciples), Schema = "Character")]
+    public class Disciples
     {
         [Key]
         public int Id { get; set; }
@@ -13,9 +13,9 @@ namespace Tank.Models.Entities.Character
         public int CharacterId { get; set; }
         public virtual Characters Character { get; set; } = null!;
 
-        public bool IsBlocked { get; set; }
+        public bool IsActive { get; set; }
 
-        public DateTime FriendshipStartDate { get; set; }
-        public DateTime FriendshipEndDate { get; set; }
+        public DateTime RelationshipStartTime { get; set; }
+        public DateTime? RelationshipStartEnd { get; set; }
     }
 }

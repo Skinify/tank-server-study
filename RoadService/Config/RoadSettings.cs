@@ -1,4 +1,4 @@
-﻿using Base.Config;
+﻿using Shared.Config;
 using System.Net;
 
 namespace RoadService.Config

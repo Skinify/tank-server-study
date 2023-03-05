@@ -51,5 +51,7 @@ namespace Tank.Models.Entities.Character
         public int Hole4Xp { get; set; }
         public int Hole5Xp { get; set; }
         public int Hole6Xp { get; set; }
+
+        public bool IsHidden { get; set; }
     }
 }
