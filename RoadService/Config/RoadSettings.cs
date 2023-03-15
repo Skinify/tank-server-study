@@ -27,6 +27,12 @@ namespace RoadService.Config
         public int? AllowedLevel { get; set; }
         public int MaxPlayers { get; set; }
 
+        public string RSAPublicKey { get; set; } = null!;
+        /*
+        public string RSAValidIssuer { get; set; } = null!;
+        public string RSAValidAudience { get; set; } = null!;
+        */
+
         public override void ValidateSettings()
         {
 

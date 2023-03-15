@@ -6,6 +6,15 @@ namespace Tank.Seed
 {
     public static partial class Seed
     {
+        public static void SeedBagTypes(this ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<BagTypes>().HasData(
+                new BagTypes { Id = (int)EBagTypes.PROP, Name = "Bind 0", Description = "" },
+                new BagTypes { Id = (int)EBagTypes.FIGHT, Name = "Bind 1", Description = "" },
+                new BagTypes { Id = (int)EBagTypes.PET, Name = "Bind 2", Description = "" }
+            );
+        }
+
         public static void SeedItemsBindTypes(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ItemBindTypes>().HasData(

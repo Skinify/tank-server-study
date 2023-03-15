@@ -26,6 +26,7 @@ namespace Tank.Models.Entities.Character
         public ICollection<Marriages> Marriages { get; set; } = null!;
         public ICollection<Friends> Friends { get; set; } = null!;
         public ICollection<Disciples> Disciples { get; set; } = null!;
+        public ICollection<CharacterItems> Items { get; set; } = null!;
 
         public DateTime CreationDate { get; set; }
 

@@ -8,19 +8,22 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Tank.Migrations
 {
     /// <inheritdoc />
-    public partial class Teste : Migration
+    public partial class teste : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
+                name: "Item");
+
+            migrationBuilder.EnsureSchema(
                 name: "Character");
 
             migrationBuilder.EnsureSchema(
-                name: "Configurations");
+                name: "Quest");
 
             migrationBuilder.EnsureSchema(
-                name: "Item");
+                name: "Configurations");
 
             migrationBuilder.EnsureSchema(
                 name: "Battle");
@@ -30,6 +33,20 @@ namespace Tank.Migrations
 
             migrationBuilder.EnsureSchema(
                 name: "Battle.PVP");
+
+            migrationBuilder.CreateTable(
+                name: "BagTypes",
+                schema: "Item",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BagTypes", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "DefaultServerConfigs",
@@ -178,6 +195,35 @@ namespace Tank.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "QuestConditionTypes",
+                schema: "Quest",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuestConditionTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuestGroups",
+                schema: "Quest",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsRepeatable = table.Column<bool>(type: "bit", nullable: false),
+                    MaxRepeatTimes = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuestGroups", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Ranks",
                 schema: "Character",
                 columns: table => new
@@ -209,6 +255,20 @@ namespace Tank.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RateTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecipeTypes",
+                schema: "Item",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -249,6 +309,7 @@ namespace Tank.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ItemsCategoryId = table.Column<int>(type: "int", nullable: false),
+                    BagTypesId = table.Column<int>(type: "int", nullable: false),
                     Icon = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Attack = table.Column<int>(type: "int", nullable: false),
                     Defense = table.Column<int>(type: "int", nullable: false),
@@ -275,6 +336,13 @@ namespace Tank.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Items", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Items_BagTypes_BagTypesId",
+                        column: x => x.BagTypesId,
+                        principalSchema: "Item",
+                        principalTable: "BagTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Items_ItemBindTypes_ItemBindTypeId",
                         column: x => x.ItemBindTypeId,
@@ -325,6 +393,45 @@ namespace Tank.Migrations
                         principalTable: "ItemsCategoriesTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Quests",
+                schema: "Quest",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MinLevel = table.Column<int>(type: "int", nullable: false),
+                    MaxLevel = table.Column<int>(type: "int", nullable: true),
+                    PreQuestId = table.Column<int>(type: "int", nullable: true),
+                    CoinsReward = table.Column<int>(type: "int", nullable: false),
+                    GoldReward = table.Column<int>(type: "int", nullable: false),
+                    MedalsReward = table.Column<int>(type: "int", nullable: false),
+                    CouponsReward = table.Column<int>(type: "int", nullable: false),
+                    Rands = table.Column<float>(type: "real", nullable: false),
+                    RandDouble = table.Column<float>(type: "real", nullable: false),
+                    BeginDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    MaxFinishTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    QuestGroupsId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Quests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Quests_QuestGroups_QuestGroupsId",
+                        column: x => x.QuestGroupsId,
+                        principalSchema: "Quest",
+                        principalTable: "QuestGroups",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Quests_Quests_PreQuestId",
+                        column: x => x.PreQuestId,
+                        principalSchema: "Quest",
+                        principalTable: "Quests",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -482,6 +589,34 @@ namespace Tank.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RecipeAward",
+                schema: "Item",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ItemId = table.Column<int>(type: "int", nullable: false),
+                    Count = table.Column<int>(type: "int", nullable: false),
+                    Strengthen = table.Column<int>(type: "int", nullable: false),
+                    AttackCompose = table.Column<int>(type: "int", nullable: false),
+                    DefenseCompose = table.Column<int>(type: "int", nullable: false),
+                    AgilityCompose = table.Column<int>(type: "int", nullable: false),
+                    LuckCompose = table.Column<int>(type: "int", nullable: false),
+                    IsBinded = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeAward", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RecipeAward_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalSchema: "Item",
+                        principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ShopItems",
                 schema: "Item",
                 columns: table => new
@@ -509,6 +644,75 @@ namespace Tank.Migrations
                         column: x => x.ShopCategoryId,
                         principalSchema: "Item",
                         principalTable: "ShopCategoriesTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CharacterQuests",
+                schema: "Quest",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    QuestId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CharacterQuests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CharacterQuests_Quests_QuestId",
+                        column: x => x.QuestId,
+                        principalSchema: "Quest",
+                        principalTable: "Quests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CharacterItems",
+                schema: "Character",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CharacterId = table.Column<int>(type: "int", nullable: false),
+                    ItemId = table.Column<int>(type: "int", nullable: false),
+                    Count = table.Column<int>(type: "int", nullable: false),
+                    Color = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Strengthen = table.Column<int>(type: "int", nullable: false),
+                    AttackCompose = table.Column<int>(type: "int", nullable: false),
+                    DefenseCompose = table.Column<int>(type: "int", nullable: false),
+                    AgilityCompose = table.Column<int>(type: "int", nullable: false),
+                    LuckCompose = table.Column<int>(type: "int", nullable: false),
+                    IsBindable = table.Column<bool>(type: "bit", nullable: false),
+                    IsUsed = table.Column<bool>(type: "bit", nullable: false),
+                    IsPermanent = table.Column<bool>(type: "bit", nullable: false),
+                    DurationDate = table.Column<int>(type: "int", nullable: true),
+                    AcquisitionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateOfUse = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Hole1Xp = table.Column<int>(type: "int", nullable: false),
+                    Hole2Xp = table.Column<int>(type: "int", nullable: false),
+                    Hole3Xp = table.Column<int>(type: "int", nullable: false),
+                    Hole4Xp = table.Column<int>(type: "int", nullable: false),
+                    Hole5Xp = table.Column<int>(type: "int", nullable: false),
+                    Hole6Xp = table.Column<int>(type: "int", nullable: false),
+                    IsHidden = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CharacterItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CharacterItems_Characters_CharacterId",
+                        column: x => x.CharacterId,
+                        principalSchema: "Character",
+                        principalTable: "Characters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CharacterItems_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalSchema: "Item",
+                        principalTable: "Items",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -695,6 +899,65 @@ namespace Tank.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Recipes",
+                schema: "Item",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RecipeTypesId = table.Column<int>(type: "int", nullable: false),
+                    RecipeAwardId = table.Column<int>(type: "int", nullable: false),
+                    SuccessRate = table.Column<float>(type: "real", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Recipes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Recipes_RecipeAward_RecipeAwardId",
+                        column: x => x.RecipeAwardId,
+                        principalSchema: "Item",
+                        principalTable: "RecipeAward",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Recipes_RecipeTypes_RecipeTypesId",
+                        column: x => x.RecipeTypesId,
+                        principalSchema: "Item",
+                        principalTable: "RecipeTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CharacterQuestContidionProgress",
+                schema: "Quest",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    QuestConditionTypeId = table.Column<int>(type: "int", nullable: false),
+                    CharacterQuestsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CharacterQuestContidionProgress", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CharacterQuestContidionProgress_CharacterQuests_CharacterQuestsId",
+                        column: x => x.CharacterQuestsId,
+                        principalSchema: "Quest",
+                        principalTable: "CharacterQuests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CharacterQuestContidionProgress_QuestConditionTypes_QuestConditionTypeId",
+                        column: x => x.QuestConditionTypeId,
+                        principalSchema: "Quest",
+                        principalTable: "QuestConditionTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Spaws",
                 schema: "Battle",
                 columns: table => new
@@ -727,6 +990,33 @@ namespace Tank.Migrations
                         column: x => x.PVPGameId,
                         principalSchema: "Battle.PVP",
                         principalTable: "PVPGames",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ItemRecipes",
+                schema: "Item",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ItemId = table.Column<int>(type: "int", nullable: false),
+                    RecipeId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ItemRecipes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ItemRecipes_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalSchema: "Item",
+                        principalTable: "Items",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ItemRecipes_Recipes_RecipeId",
+                        column: x => x.RecipeId,
+                        principalSchema: "Item",
+                        principalTable: "Recipes",
                         principalColumn: "Id");
                 });
 
@@ -909,6 +1199,38 @@ namespace Tank.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_CharacterItems_CharacterId",
+                schema: "Character",
+                table: "CharacterItems",
+                column: "CharacterId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CharacterItems_ItemId",
+                schema: "Character",
+                table: "CharacterItems",
+                column: "ItemId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CharacterQuestContidionProgress_CharacterQuestsId",
+                schema: "Quest",
+                table: "CharacterQuestContidionProgress",
+                column: "CharacterQuestsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CharacterQuestContidionProgress_QuestConditionTypeId",
+                schema: "Quest",
+                table: "CharacterQuestContidionProgress",
+                column: "QuestConditionTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CharacterQuests_QuestId",
+                schema: "Quest",
+                table: "CharacterQuests",
+                column: "QuestId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CharacterRanks_CharacterId",
                 schema: "Character",
                 table: "CharacterRanks",
@@ -944,6 +1266,24 @@ namespace Tank.Migrations
                 schema: "Character",
                 table: "Friends",
                 column: "CharacterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ItemRecipes_ItemId",
+                schema: "Item",
+                table: "ItemRecipes",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ItemRecipes_RecipeId",
+                schema: "Item",
+                table: "ItemRecipes",
+                column: "RecipeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Items_BagTypesId",
+                schema: "Item",
+                table: "Items",
+                column: "BagTypesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Items_Hole1Id",
@@ -1054,6 +1394,36 @@ namespace Tank.Migrations
                 column: "RoomTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Quests_PreQuestId",
+                schema: "Quest",
+                table: "Quests",
+                column: "PreQuestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Quests_QuestGroupsId",
+                schema: "Quest",
+                table: "Quests",
+                column: "QuestGroupsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecipeAward_ItemId",
+                schema: "Item",
+                table: "RecipeAward",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Recipes_RecipeAwardId",
+                schema: "Item",
+                table: "Recipes",
+                column: "RecipeAwardId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Recipes_RecipeTypesId",
+                schema: "Item",
+                table: "Recipes",
+                column: "RecipeTypesId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ShopItems_ItemId",
                 schema: "Item",
                 table: "ShopItems",
@@ -1092,6 +1462,14 @@ namespace Tank.Migrations
                 schema: "Character");
 
             migrationBuilder.DropTable(
+                name: "CharacterItems",
+                schema: "Character");
+
+            migrationBuilder.DropTable(
+                name: "CharacterQuestContidionProgress",
+                schema: "Quest");
+
+            migrationBuilder.DropTable(
                 name: "CharacterRanks",
                 schema: "Character");
 
@@ -1110,6 +1488,10 @@ namespace Tank.Migrations
             migrationBuilder.DropTable(
                 name: "Friends",
                 schema: "Character");
+
+            migrationBuilder.DropTable(
+                name: "ItemRecipes",
+                schema: "Item");
 
             migrationBuilder.DropTable(
                 name: "Levels",
@@ -1140,8 +1522,20 @@ namespace Tank.Migrations
                 schema: "Character");
 
             migrationBuilder.DropTable(
+                name: "CharacterQuests",
+                schema: "Quest");
+
+            migrationBuilder.DropTable(
+                name: "QuestConditionTypes",
+                schema: "Quest");
+
+            migrationBuilder.DropTable(
                 name: "RateTypes",
                 schema: "Configurations");
+
+            migrationBuilder.DropTable(
+                name: "Recipes",
+                schema: "Item");
 
             migrationBuilder.DropTable(
                 name: "Characters",
@@ -1168,7 +1562,15 @@ namespace Tank.Migrations
                 schema: "Battle.PVP");
 
             migrationBuilder.DropTable(
-                name: "Items",
+                name: "Quests",
+                schema: "Quest");
+
+            migrationBuilder.DropTable(
+                name: "RecipeAward",
+                schema: "Item");
+
+            migrationBuilder.DropTable(
+                name: "RecipeTypes",
                 schema: "Item");
 
             migrationBuilder.DropTable(
@@ -1178,6 +1580,26 @@ namespace Tank.Migrations
             migrationBuilder.DropTable(
                 name: "PVPStages",
                 schema: "Battle.PVP");
+
+            migrationBuilder.DropTable(
+                name: "QuestGroups",
+                schema: "Quest");
+
+            migrationBuilder.DropTable(
+                name: "Items",
+                schema: "Item");
+
+            migrationBuilder.DropTable(
+                name: "Maps",
+                schema: "Battle");
+
+            migrationBuilder.DropTable(
+                name: "StageTypes",
+                schema: "Battle");
+
+            migrationBuilder.DropTable(
+                name: "BagTypes",
+                schema: "Item");
 
             migrationBuilder.DropTable(
                 name: "ItemBindTypes",
@@ -1190,14 +1612,6 @@ namespace Tank.Migrations
             migrationBuilder.DropTable(
                 name: "ItemsCategoriesTypes",
                 schema: "Item");
-
-            migrationBuilder.DropTable(
-                name: "Maps",
-                schema: "Battle");
-
-            migrationBuilder.DropTable(
-                name: "StageTypes",
-                schema: "Battle");
         }
     }
 }

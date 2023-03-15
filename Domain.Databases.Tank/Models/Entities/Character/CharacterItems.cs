@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Helpers;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,6 +12,26 @@ namespace Tank.Models.Entities.Character
     [Table(nameof(CharacterItems), Schema = "Character")]
     public class CharacterItems
     {
+        public CharacterItems() { }
+
+        public CharacterItems(CharacterItems characterItems, Characters? character = null, Items? item = null)
+        {
+            Id = characterItems.Id;
+            CharacterId = characterItems.CharacterId;
+            ItemId = characterItems.ItemId;
+            Count = characterItems.Count;
+            Color = characterItems.Color;
+            Strengthen = characterItems.Strengthen;
+            AttackCompose = characterItems.AttackCompose;
+            DefenseCompose = characterItems.DefenseCompose;
+
+            if(character is not null)
+                Character = character;
+
+            if(item is not null)
+                Item = item;
+        }
+
         [Key]
         public int Id { get; set; }
 

@@ -23,6 +23,11 @@ namespace Tank.Models.Entities.Item
         public virtual ItemsCategoriesTypes ItemsCategory { get; set; } = null!;
 
 
+        [ForeignKey(nameof(BagTypes))]
+        public int BagTypesId { get; set; }
+        public virtual BagTypes BagType { get; set; } = null!;
+
+
         [Required]
         public string Icon { get; set; } = null!;
 
@@ -78,5 +83,7 @@ namespace Tank.Models.Entities.Item
         [ForeignKey(nameof(ItemHoleTypes))]
         public int? Hole6Id { get; set; }
         public virtual ItemHoleTypes? Hole6 { get; set; }
+
+        public ICollection<ItemRecipes> ItemRecipes { get; set; } = null!;
     }
 }

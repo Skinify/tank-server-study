@@ -24,7 +24,7 @@ namespace API.Controllers
         public async Task<ActionResult<LoginResponseDTO>> Login(LoginRequestDTO loginRequestDTO)
         {
             var token = await Task.FromResult(_authService.CreateToken(new List<Claim>() {
-                    new Claim ( "http://example.org/claims/simplecustomclaim", "Driver's License")
+                    new Claim ( "UserId", "1")
                 }));
             return Ok(token);
         }

@@ -41,6 +41,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddSingleton<BaseManagerCollection>();
 
         services.AddSingleton<IManager, ServerManager>();
+        services.AddSingleton<ConnectedClientsManager>();
 
     })
     .UseSerilog((ctx, lc) =>

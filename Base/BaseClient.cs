@@ -4,6 +4,8 @@ using Extensions;
 using System.Net.Sockets;
 using Helpers;
 using Base.Packets.Base;
+using Base.Notations;
+using System.Reflection;
 
 namespace Base
 {
@@ -13,6 +15,7 @@ namespace Base
         private readonly SocketState _clientSocketState;
         private readonly Dictionary<int, IHandler<OUT>> _packageHandlers;
         private AsyncCallback? _socketDataReceivedCallback;
+        private readonly string _socketId;
 
         public delegate void ClientEventHandle(string clientIp, BaseClient<IN, OUT> C);
         public event ClientEventHandle? Disconnected;
@@ -22,6 +25,7 @@ namespace Base
             _serviceProvider = serviceProvider;
             _clientSocketState = socketState;
             _packageHandlers = new Dictionary<int, IHandler<OUT>>();
+            _socketId = Guid.NewGuid().ToString();
         }
 
         public void Listen()
@@ -54,7 +58,7 @@ namespace Base
 
                 var byteComming = state.ReadBufferDataAsByteArray();
 
-                var packageIn = default(IN);
+                var packageIn = MiscHelper.CreateInstance<IN>()();
                 if (packageIn is null)
                     return;
 
@@ -86,9 +90,25 @@ namespace Base
             WaitForData(async.AsyncState);
         }
 
-        public bool AddHandler(int handleCode, IHandler<OUT> handler)
+        public void AddHandler(params Type[] types)
         {
-            return _packageHandlers.TryAdd(handleCode, handler);
+            types.ToList().ForEach((type) =>
+            {
+                Action<IPacket> sendData = SendData;
+                IHandler<OUT>? handlerInstance = Activator.CreateInstance(type, _serviceProvider, _socketId, sendData) as IHandler<OUT>;
+                if (handlerInstance is null)
+                    return;
+
+                PacketHandler? handlerAnotation = handlerInstance.GetType().GetCustomAttribute(typeof(PacketHandler), true) as PacketHandler;
+                if (handlerAnotation is null)
+                    throw new Exception($"Handler {type.Name} is not associated with any package type");
+
+                if (!typeof(IHandler<OUT>).IsAssignableFrom(type))
+                    throw new Exception($"Handler {type.Name} - {handlerAnotation.HandlerCode}, does not implement IHandler");
+
+                if (!_packageHandlers.TryAdd(handlerAnotation.HandlerCode, handlerInstance))
+                    throw new Exception($"Handler of code {handlerAnotation.HandlerCode} has already been added");
+            });
         }
 
         public void Disconnect()

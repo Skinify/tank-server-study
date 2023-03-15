@@ -1,6 +1,6 @@
 ﻿namespace Tank.Enums
 {
-    public enum ERoomDifficultyTypes
+    public enum EPVEDifficultyTypes
     {
         Simple = 0,
         Normal = 1,

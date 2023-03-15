@@ -16,9 +16,11 @@ namespace Base
         private readonly CancellationToken _cancellationToken;
 
         private readonly BlockingCollection<byte[]> _recvQueue;
-        private readonly BlockingCollection<ServerPacketOut> _sendQueue;
+        private readonly BlockingCollection<IPacket> _sendQueue;
 
-        private readonly Dictionary<int, IHandler<ServerPacketOut>> _packageHandlers;
+        private readonly Dictionary<int, IHandler<IPacket>> _packageHandlers;
+
+        private readonly string _clientId;
 
         public BaseConnector(ClientWebSocket clientWebSocket, IServiceProvider serviceProvider, CancellationTokenSource cancellationToken)
         {
@@ -26,8 +28,10 @@ namespace Base
             _serviceProvider = serviceProvider;
             _cancellationToken = cancellationToken.Token;
             _recvQueue = new BlockingCollection<byte[]>();
-            _sendQueue = new BlockingCollection<ServerPacketOut>();
-            _packageHandlers = new Dictionary<int, IHandler<ServerPacketOut>>();
+            _sendQueue = new BlockingCollection<IPacket>();
+            _packageHandlers = new Dictionary<int, IHandler<IPacket>>();
+
+            _clientId = Guid.NewGuid().ToString();
         }
 
         public async Task ConnectTo(string serverUrl)
@@ -47,9 +51,9 @@ namespace Base
                         byte[] decodedMessage = SocketHelper.GetDecodedData(recvMsg, recvMsg.Length);
                         package.Fill(decodedMessage, decodedMessage.Length);
                         var packageType = package.ReadInt(true);
-                        if (_packageHandlers.TryGetValue(packageType, out IHandler<ServerPacketOut>? handler))
+                        if (_packageHandlers.TryGetValue(packageType, out IHandler<IPacket>? handler))
                         {
-                            ServerPacketOut? packetOut = await handler.Handle(package);
+                            IPacket? packetOut = await handler.Handle(package);
                             if (packetOut is not null)
                                 _sendQueue.Add(packetOut);
                         }
@@ -85,7 +89,7 @@ namespace Base
             Console.WriteLine("Send task started...");
             do
             {
-                ServerPacketOut sendMsg = _sendQueue.Take();
+                IPacket sendMsg = _sendQueue.Take();
                 var toSend = SocketHelper.FrameMessage(sendMsg.Buffer);
                 await ws.SendAsync(toSend, WebSocketMessageType.Binary, true, token);
 
@@ -94,11 +98,17 @@ namespace Base
             Console.WriteLine("Send task exiting...");
         }
 
+        public void SendData(IPacket packet)
+        {
+            _sendQueue.Add(packet);
+        }
+
         public void AddHandler(params Type[] types)
         {
             types.ToList().ForEach((type) =>
             {
-                IHandler<ServerPacketOut>? handlerInstance = Activator.CreateInstance(type, _serviceProvider) as IHandler<ServerPacketOut>;
+                Action<IPacket> sendData = SendData;
+                IHandler<IPacket>? handlerInstance = Activator.CreateInstance(type, _serviceProvider, _clientId, sendData) as IHandler<IPacket>;
                 if (handlerInstance is null)
                     return;
 

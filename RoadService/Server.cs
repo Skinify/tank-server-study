@@ -7,7 +7,6 @@ using RoadService.Connectors;
 using RoadService.Handlers.Client;
 using RoadService.Handlers.Server;
 using Shared.ServerClients;
-using static CenterWorker.CenterEndpoint;
 
 namespace RoadService
 {

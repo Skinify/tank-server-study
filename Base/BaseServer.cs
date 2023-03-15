@@ -26,7 +26,7 @@ namespace Base
 
         private AsyncCallback? _socketDataReceivedCallback;
 
-        private readonly IDictionary<int, IHandler<OUT>> _handlers;
+        private readonly IList<Type> _handlersTypes;
 
         private readonly Timer _pingTimer;
 
@@ -36,8 +36,8 @@ namespace Base
             _logger = logger;
             _clients = new HybridDictionary();
             _socketDataReceivedCallback = OnDataReceived;
-            _handlers = new Dictionary<int, IHandler<OUT>>();
-            _pingTimer = new Timer(new TimerCallback(PingClients), null, 1, 10000);
+            _handlersTypes = new List<Type>();
+            //_pingTimer = new Timer(new TimerCallback(PingClients), null, 1, 10000);
         }
 
         private void PingClients(object? state)
@@ -119,7 +119,7 @@ namespace Base
                 byte[] response = WriteHandShake(webSocketKey);
                 state.Socket.Send(response);
                 var client = AddClient(ip, new BaseClient<IN, OUT>(_serviceProvider, state));
-                _handlers.ToList().ForEach(handler => client.AddHandler(handler.Key, handler.Value));
+                _handlersTypes.ToList().ForEach(handlerType => client.AddHandler(handlerType));
                 client.Listen();
                 
                 client.Disconnected += RemoveClient;
@@ -160,22 +160,7 @@ namespace Base
 
         public void RegisterHandlers(params Type[] types)
         {
-            types.ToList().ForEach((type) =>
-            {
-                IHandler<OUT>? handlerInstance = Activator.CreateInstance(type, _serviceProvider) as IHandler<OUT>;
-                if (handlerInstance is null)
-                    return;
-
-                PacketHandler? handlerAnotation = handlerInstance.GetType().GetCustomAttribute(typeof(PacketHandler), true) as PacketHandler;
-                if (handlerAnotation is null)
-                    throw new Exception($"Handler {type.Name} is not associated with any package type");
-
-                if (!typeof(IHandler<OUT>).IsAssignableFrom(type))
-                    throw new Exception($"Handler {type.Name} - {handlerAnotation.HandlerCode}, does not implement IHandler");
-
-                if (!_handlers.TryAdd(handlerAnotation.HandlerCode, handlerInstance))
-                    throw new Exception($"Handler of code {handlerAnotation.HandlerCode} has already been added");
-            });
+            types.ToList().ForEach(_handlersTypes.Add);
         }
 
         public void RemoveClient(string ip, BaseClient<IN, OUT> c)

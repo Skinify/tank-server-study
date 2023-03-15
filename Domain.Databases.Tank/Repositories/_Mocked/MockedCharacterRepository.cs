@@ -1,4 +1,5 @@
-﻿using Tank.Models.Entities.Character;
+﻿using Tank.Enums;
+using Tank.Models.Entities.Character;
 using Tank.Repositories._Interface;
 
 namespace Tank.Repositories._Mocked
@@ -12,6 +13,11 @@ namespace Tank.Repositories._Mocked
         }
 
         public Task<Characters?> GetCharacterById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<CharacterItems>> GetCharacterItemsByBagType(EBagTypes eBagTypes)
         {
             throw new NotImplementedException();
         }

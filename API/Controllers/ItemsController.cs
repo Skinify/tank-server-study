@@ -36,5 +36,14 @@ namespace API.Controllers
             return Ok(await _shopService.ListShopItemsFromCategory(eShopCategoriesTypes));
         }
 
+
+        //Teste
+        [Route("CharItemsByBagType")]
+        [HttpGet]
+        public async Task<ActionResult<IList<ItemsCategoriesDTO>>> CharItemsByBagType(EBagTypes eBagTypes)
+        {
+            return Ok(await _shopService.ListCharacterItemsByBagType(eBagTypes));
+        }
+
     }
 }

@@ -9,7 +9,7 @@ namespace FightingService.Handlers
 {
     public class TestHandler : BaseHandler, IHandler<ServerPacketOut>
     {
-        public TestHandler(IServiceProvider serviceProvider) : base(serviceProvider) {  }
+        public TestHandler(IServiceProvider serviceProvider, string clientId, Action<IPacket> sendData) : base(serviceProvider, clientId, sendData) {  }
 
         public async Task<ServerPacketOut?> Handle(BasePacketIn packetIn)
         {
